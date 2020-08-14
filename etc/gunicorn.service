@@ -1,0 +1,16 @@
+[Unit]
+Description=gunicorn daemon
+After=network.target
+
+[Service]
+User=root
+Group=www-data
+WorkingDirectory=/var/www/aluonline/alu
+ExecStart=/var/www/aluonline/venv/bin/gunicorn \
+          --access-logfile - \
+          --workers 3 \
+          --bind unix:/var/www/aluonline/alu/gunicorn.sock \
+          alu.wsgi:application
+
+[Install]
+WantedBy=multi-user.target
