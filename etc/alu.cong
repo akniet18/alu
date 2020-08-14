@@ -4,12 +4,12 @@ server {
 
     location /media/ {
         autoindex on;
-        alias /var/www/aluonline/media/;
+        alias /var/www/aluonline/alu/media/;
     }
 
     location /static/ {
         autoindex on;
-        alias /var/www/aluonline/static/;
+        alias /var/www/aluonline/alu/static/;
     }
 
     location / {

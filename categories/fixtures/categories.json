@@ -1,0 +1,797 @@
+[
+	{
+		"model": "categories.category",
+		"pk": 1,
+		"fields": {
+			"name": "Хобби"
+		}
+	},
+	{
+		"model": "categories.category",
+		"pk": 2,
+		"fields": {
+			"name": "Babylon"
+		}
+	},
+	{
+		"model": "categories.category",
+		"pk": 3,
+		"fields": {
+			"name": "Дом и сад"
+		}
+	},
+	{
+		"model": "categories.category",
+		"pk": 4,
+		"fields": {
+			"name": "Электроника"
+		}
+	},
+	{
+		"model": "categories.category",
+		"pk": 5,
+		"fields": {
+			"name": "Мода"
+		}
+	},
+	{
+		"model": "categories.subcategory",
+		"pk": 1,
+		"fields": {
+			"name": "Книги",
+			"category": 1
+		}
+	},
+	{
+		"model": "categories.subcategory",
+		"pk": 2,
+		"fields": {
+			"name": "Игры",
+			"category": 1
+		}
+	},
+	{
+		"model": "categories.subcategory",
+		"pk": 3,
+		"fields": {
+			"name": "Спорт и отдых ",
+			"category": 1
+		}
+	},
+	{
+		"model": "categories.subcategory",
+		"pk": 4,
+		"fields": {
+			"name": "Музыкальные инструменты ",
+			"category": 1
+		}
+	},
+	{
+		"model": "categories.subcategory",
+		"pk": 5,
+		"fields": {
+			"name": "Другое",
+			"category": 1
+		}
+	},
+	{
+		"model": "categories.subcategory",
+		"pk": 6,
+		"fields": {
+			"name": "Игрушки",
+			"category": 2
+		}
+	},
+	{
+		"model": "categories.subcategory",
+		"pk": 7,
+		"fields": {
+			"name": "Детская мебель",
+			"category": 2
+		}
+	},
+	{
+		"model": "categories.subcategory",
+		"pk": 8,
+		"fields": {
+			"name": "Прогулка",
+			"category": 2
+		}
+	},
+	{
+		"model": "categories.subcategory",
+		"pk": 9,
+		"fields": {
+			"name": "Строительство и ремонт",
+			"category": 3
+		}
+	},
+	{
+		"model": "categories.subcategory",
+		"pk": 10,
+		"fields": {
+			"name": "Товары для праздника",
+			"category": 3
+		}
+	},
+	{
+		"model": "categories.subcategory",
+		"pk": 11,
+		"fields": {
+			"name": "Кухня и кухонные аксессуары ",
+			"category": 3
+		}
+	},
+	{
+		"model": "categories.subcategory",
+		"pk": 12,
+		"fields": {
+			"name": "Интерьер",
+			"category": 3
+		}
+	},
+	{
+		"model": "categories.subcategory",
+		"pk": 13,
+		"fields": {
+			"name": "Сад и садовый инвентарь ",
+			"category": 3
+		}
+	},
+	{
+		"model": "categories.subcategory",
+		"pk": 14,
+		"fields": {
+			"name": "Прочее",
+			"category": 3
+		}
+	},
+	{
+		"model": "categories.subcategory",
+		"pk": 15,
+		"fields": {
+			"name": "Зоотовары",
+			"category": 3
+		}
+	},
+	{
+		"model": "categories.subcategory",
+		"pk": 16,
+		"fields": {
+			"name": "Планшеты, гаджеты, аксессуары ",
+			"category": 4
+		}
+	},
+	{
+		"model": "categories.subcategory",
+		"pk": 17,
+		"fields": {
+			"name": "Аудиотехника",
+			"category": 4
+		}
+	},
+	{
+		"model": "categories.subcategory",
+		"pk": 18,
+		"fields": {
+			"name": "Игры и игровые приставки",
+			"category": 4
+		}
+	},
+	{
+		"model": "categories.subcategory",
+		"pk": 19,
+		"fields": {
+			"name": "Компьютеры и комплектующие",
+			"category": 4
+		}
+	},
+	{
+		"model": "categories.subcategory",
+		"pk": 20,
+		"fields": {
+			"name": "Фото/видео",
+			"category": 4
+		}
+	},
+	{
+		"model": "categories.subcategory",
+		"pk": 21,
+		"fields": {
+			"name": "Техника для дома ",
+			"category": 4
+		}
+	},
+	{
+		"model": "categories.subcategory",
+		"pk": 22,
+		"fields": {
+			"name": "Уход за волосами",
+			"category": 4
+		}
+	},
+	{
+		"model": "categories.subcategory",
+		"pk": 23,
+		"fields": {
+			"name": "Одежда",
+			"category": 5
+		}
+	},
+	{
+		"model": "categories.subcategory",
+		"pk": 24,
+		"fields": {
+			"name": "Для свадьбы",
+			"category": 5
+		}
+	},
+	{
+		"model": "categories.subcategory",
+		"pk": 25,
+		"fields": {
+			"name": "Костюмы",
+			"category": 5
+		}
+	},
+	{
+		"model": "categories.subcategory",
+		"pk": 26,
+		"fields": {
+			"name": "Аксессуары ",
+			"category": 5
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 1,
+		"fields": {
+			"name": "Деловая литература",
+			"subcategory": 1
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 2,
+		"fields": {
+			"name": "Художественная литература",
+			"subcategory": 1
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 3,
+		"fields": {
+			"name": "Образование и учебники",
+			"subcategory": 1
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 4,
+		"fields": {
+			"name": "Детская литература",
+			"subcategory": 1
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 5,
+		"fields": {
+			"name": "Книги на иностранных языках",
+			"subcategory": 1
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 6,
+		"fields": {
+			"name": "Нехудожетсвенная литература",
+			"subcategory": 1
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 7,
+		"fields": {
+			"name": "Аксессуары для книг",
+			"subcategory": 1
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 8,
+		"fields": {
+			"name": "Настольные игры",
+			"subcategory": 2
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 9,
+		"fields": {
+			"name": "Подвижные игры",
+			"subcategory": 2
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 10,
+		"fields": {
+			"name": "Мафия",
+			"subcategory": 2
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 11,
+		"fields": {
+			"name": "Пазл",
+			"subcategory": 2
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 12,
+		"fields": {
+			"name": "Активный отдых",
+			"subcategory": 3
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 13,
+		"fields": {
+			"name": "Фитнес",
+			"subcategory": 3
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 14,
+		"fields": {
+			"name": "Рыбалка",
+			"subcategory": 3
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 15,
+		"fields": {
+			"name": "Товары для отдыха",
+			"subcategory": 3
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 16,
+		"fields": {
+			"name": "Футбол",
+			"subcategory": 3
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 17,
+		"fields": {
+			"name": "Бокс/единоборство",
+			"subcategory": 3
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 18,
+		"fields": {
+			"name": "Гитары",
+			"subcategory": 4
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 19,
+		"fields": {
+			"name": "Студийное оборудованиe",
+			"subcategory": 4
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 20,
+		"fields": {
+			"name": "Аксессуары для музыкальных оборудований",
+			"subcategory": 4
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 21,
+		"fields": {
+			"name": "Пианино/рояли/синтезаторы",
+			"subcategory": 4
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 22,
+		"fields": {
+			"name": "Духовые инструменты",
+			"subcategory": 4
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 23,
+		"fields": {
+			"name": "Куклы и аксессуары",
+			"subcategory": 6
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 24,
+		"fields": {
+			"name": "Мягкие игрушки",
+			"subcategory": 6
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 25,
+		"fields": {
+			"name": "Конструкторы",
+			"subcategory": 6
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 26,
+		"fields": {
+			"name": "Транспорт",
+			"subcategory": 6
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 27,
+		"fields": {
+			"name": "Радиоуправляемые игрушки",
+			"subcategory": 6
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 28,
+		"fields": {
+			"name": "Развивающие игрушки",
+			"subcategory": 6
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 29,
+		"fields": {
+			"name": "Головоломки",
+			"subcategory": 6
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 30,
+		"fields": {
+			"name": "Интерьер",
+			"subcategory": 7
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 31,
+		"fields": {
+			"name": "Лампы/Ночники",
+			"subcategory": 7
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 32,
+		"fields": {
+			"name": "Детские коляски",
+			"subcategory": 8
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 33,
+		"fields": {
+			"name": "Детские автокресла",
+			"subcategory": 8
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 34,
+		"fields": {
+			"name": "Детский транспорт",
+			"subcategory": 8
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 35,
+		"fields": {
+			"name": "Смарт-часы",
+			"subcategory": 16
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 36,
+		"fields": {
+			"name": "Фитнес-браслеты",
+			"subcategory": 16
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 37,
+		"fields": {
+			"name": "Электронные книги",
+			"subcategory": 16
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 38,
+		"fields": {
+			"name": "Power bank",
+			"subcategory": 16
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 39,
+		"fields": {
+			"name": "Наушники и гарнитура",
+			"subcategory": 17
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 40,
+		"fields": {
+			"name": "Колонки",
+			"subcategory": 17
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 41,
+		"fields": {
+			"name": "Игры для приставок/PS",
+			"subcategory": 18
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 42,
+		"fields": {
+			"name": "Приставки/PS",
+			"subcategory": 18
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 43,
+		"fields": {
+			"name": "Настольные компьютеры",
+			"subcategory": 19
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 44,
+		"fields": {
+			"name": "Клавиатуры",
+			"subcategory": 19
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 45,
+		"fields": {
+			"name": "Мыши",
+			"subcategory": 19
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 46,
+		"fields": {
+			"name": "Кабели и переходники",
+			"subcategory": 19
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 47,
+		"fields": {
+			"name": "Другое",
+			"subcategory": 19
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 48,
+		"fields": {
+			"name": "Фотоаппарат",
+			"subcategory": 20
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 49,
+		"fields": {
+			"name": "Экшн-камеры",
+			"subcategory": 20
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 50,
+		"fields": {
+			"name": "Объективы",
+			"subcategory": 20
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 51,
+		"fields": {
+			"name": "Штативы",
+			"subcategory": 20
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 52,
+		"fields": {
+			"name": "Аксессуары",
+			"subcategory": 20
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 53,
+		"fields": {
+			"name": "Кухня",
+			"subcategory": 21
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 54,
+		"fields": {
+			"name": "ТВ и проекторы",
+			"subcategory": 21
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 55,
+		"fields": {
+			"name": "Пылесосы",
+			"subcategory": 21
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 56,
+		"fields": {
+			"name": "Утюги",
+			"subcategory": 21
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 57,
+		"fields": {
+			"name": "Швейная машина",
+			"subcategory": 21
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 58,
+		"fields": {
+			"name": "Плойки и выпрямители",
+			"subcategory": 22
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 59,
+		"fields": {
+			"name": "Машинки для стрижки волос",
+			"subcategory": 22
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 60,
+		"fields": {
+			"name": "Мужская одежда",
+			"subcategory": 23
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 61,
+		"fields": {
+			"name": "Женская одежда",
+			"subcategory": 23
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 62,
+		"fields": {
+			"name": "Детская одежда",
+			"subcategory": 23
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 63,
+		"fields": {
+			"name": "Свадебные платья/костюмы",
+			"subcategory": 24
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 64,
+		"fields": {
+			"name": "Свадебные аксессуары",
+			"subcategory": 24
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 65,
+		"fields": {
+			"name": "Карнавальные костюмы",
+			"subcategory": 25
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 66,
+		"fields": {
+			"name": "Сумки",
+			"subcategory": 26
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 67,
+		"fields": {
+			"name": "Бижутерия ",
+			"subcategory": 26
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 68,
+		"fields": {
+			"name": "Часы",
+			"subcategory": 26
+		}
+	},
+	{
+		"model": "categories.sub_subcategory",
+		"pk": 69,
+		"fields": {
+			"name": "Ремни",
+			"subcategory": 26
+		}
+	}
+]
