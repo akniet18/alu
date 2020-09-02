@@ -6,5 +6,7 @@ urlpatterns = [
     path('register/', Register.as_view()),
 
     path('phone/check', LoginUser.as_view()),
-    path('login', Logined.as_view())
+    path('login', Logined.as_view()),
+
+    path('avatar', Avatar.as_view())
 ]
