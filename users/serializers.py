@@ -15,3 +15,10 @@ class AvatarSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ("avatar",)
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ("avatar","nickname", "phone")
+        read_only_fields = ("avatar", "phone")

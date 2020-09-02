@@ -8,5 +8,6 @@ urlpatterns = [
     path('phone/check', LoginUser.as_view()),
     path('login', Logined.as_view()),
 
+    path("detail/<id>", detailUser.as_view()),
     path('avatar', Avatar.as_view())
 ]

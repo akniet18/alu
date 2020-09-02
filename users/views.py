@@ -146,6 +146,26 @@ class Avatar(APIView):
             return Response(s.errors)
 
 
+class detailUser(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request, id):
+        u = User.objects.get(id = id)
+        s = UserSerializer(u)
+        return Response(s.data)
+
+    def post(self, request, id):
+        s = UserSerializer(data=request.data)
+        if s.is_valid():
+            u = User.objects.get(id = id)
+            u.nickname = s.validated_data['nickname']
+            u.save()
+            return Response({'status': "ok"})
+        else:
+            return Response(s.errors)
+
+
+
 class admin_side_get_view(APIView):
     permission_classes = [permissions.IsAuthenticated, ]
 
