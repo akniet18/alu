@@ -13,17 +13,22 @@ from datetime import datetime
 from utils.compress import compress_image
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
+from locations.models import *
 
 
 
 class getProduct(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny,]
-    queryset = Product.objects.all()
+    queryset = Product.objects.filter(is_publish=True)
     serializer_class = getProductSerializer
     filter_backends = [DjangoFilterBackend]
     filter_fields = ('category','subcategory', 'subcategory2', "price")
 
     def get_queryset(self):
+        # user = self.request.user
+        # if user.is_authenticated:
+        #     if user.role == 1:
+        #         self.queryset = Product.objects.filter(is_publish=False)
         minheight = self.request.GET.get('minprice')
         maxheight = self.request.GET.get('maxprice')
         if(minheight and maxheight):
@@ -32,7 +37,7 @@ class getProduct(viewsets.ModelViewSet):
 
 
 class product(APIView):
-    permission_classes = [permissions.AllowAny,]
+    permission_classes = [permissions.IsAuthenticated,]
 
     def post(self, request):
         s = ProductSerializer(data = request.data)
@@ -42,10 +47,17 @@ class product(APIView):
             price = s.validated_data['price']
             phones = s.validated_data['phones']
             images = s.validated_data['product_image']
+            address = s.validated_data['address']
+            location, created = Location.objects.get_or_create(
+                city = City.objects.get(id=1),
+                address = address
+            )
             p = Product.objects.create(
                 title = title,
                 price = price,
-                phones = phones
+                phones = phones,
+                owner = request.user,
+                location = location
             )
             for i in images:
                 img = compress_image(i, (200, 200))
@@ -69,4 +81,29 @@ class favorites(APIView):
             request.user.favorites.add(product)
         return Response({'status': 'ok'})
 
+
+class ProductPublish(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def post(self, request, id):
+        s = ProductPublishSerializer(data=request.data)
+        if s.is_valid():
+            product = Product.objects.get(id=id)
+            product.category = s.validated_data['category']
+            product.subcategory = s.validated_data['subcategory']
+            product.subcategory2 = s.validated_data['subcategory2']
+            product.is_publish = True
+            product.publish_date = datetime.now()
+            product.save()
+            return Response({"status": "ok"})
+        else:
+            return Response(s.errors)
+
+class GetProductPublish(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request):
+        p = Product.objects.filter(is_publish=False)
+        s = getProductSerializer(p, many=True)
+        return Response(s.data)
 

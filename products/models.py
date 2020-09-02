@@ -5,10 +5,20 @@ class Product(models.Model):
     title = models.CharField(max_length=150)
     price = models.IntegerField()
     phones = ArrayField(models.CharField(max_length=50),  10)
+    # 
     location = models.ForeignKey("locations.Location", on_delete=models.CASCADE, null=True, blank=True)
+    # 
     category = models.ForeignKey("categories.category", on_delete=models.SET_NULL, null=True, blank=True)
     subcategory = models.ForeignKey("categories.subcategory", on_delete=models.SET_NULL, null=True, blank=True)
     subcategory2 = models.ForeignKey("categories.sub_subcategory", on_delete=models.SET_NULL, null=True, blank=True)
+    # 
+    owner = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="my_product", null=True, blank=True)
+    # 
+    is_publish = models.BooleanField(default=False, blank=True, null=True)
+    is_rented = models.BooleanField(default=False, blank=True)
+    # 
+    publish_date = models.DateField(auto_now=False, auto_now_add=False, blank=True, null=True)
+    created_date = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     
     def __str__(self):
         return self.title

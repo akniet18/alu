@@ -44,19 +44,20 @@ def user_photos_dir(instanse, filename):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+    ROLE_SALES_DEPARTMENT = 1
+    ROLE_CONTROL_DEPARTMENT = 2
+    ROLE_CHOICES = (
+        (ROLE_SALES_DEPARTMENT, 'Отдел продаж'),
+        (ROLE_CONTROL_DEPARTMENT, 'Отдел контроля')
+    )
+
+
     GENDER_MALE = 1
     GENDER_FEMALE = 2
     GENDER_CHOICES = (
         (GENDER_MALE, _('Male')),
         (GENDER_FEMALE, _('Female')),
     )
-
-    CUSTOMER = 'CS'
-    WORKER = 'WR'
-    CURRENT_ROLE = [
-        (CUSTOMER, 'customer'),
-        (WORKER, 'worker'),
-    ]
     # phone_regex = RegexValidator( regex = r'^\+?1?\d{7,12}$',
     # message = "Phone number in the format '+77777777'. Up to 12 digits")
     # phone = models.CharField(max_length=12,validators = [phone_regex], unique=True)
@@ -87,9 +88,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     # middle_name = models.CharField(max_length=255, blank=True, null=True)
 
     # -------------------------------------------------------
-    is_worker = models.BooleanField(default=True)
-    is_customer = models.BooleanField(default=True)
-    current_role = models.CharField(choices=CURRENT_ROLE, default="CS", blank=True, max_length=25)
+    role = models.SmallIntegerField(choices=ROLE_CHOICES, blank=True, null=True)
 
     # -------------------------------------------------------
     # role = models.ManyToManyField(SubRole, related_name = "role_user", blank=True)
@@ -102,7 +101,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     #--------------------------------------------------------
     created_at = models.DateTimeField(auto_now_add=True)
-    last_online = models.DateTimeField(null=True)
+    last_online = models.DateTimeField(null=True, blank=True)
      
     #--------------------------------------------------------
     avatar = models.ImageField(upload_to=user_photos_dir, default="default/default.png")
@@ -117,7 +116,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     # rat = models.FloatField(blank=True, null=True)
 
     # about = models.TextField(blank=True, null=True)
-    favorites = models.ManyToManyField("products.Product")
+    favorites = models.ManyToManyField("products.Product", related_name="favs", blank=True)
+    basket = models.ManyToManyField("products.Product", related_name="basket", blank=True)
 
     # -------------------------------------------------------
     USERNAME_FIELD = 'phone'
@@ -145,7 +145,7 @@ class PhoneOTP(models.Model):
     # message = "Phone number in the format '+77777777'. Up to 12 digits")
     # phone = models.CharField(max_length=12,validators = [phone_regex], unique=True)
     phone = models.CharField(max_length = 12, unique = True)
-    # nickname = models.CharField(max_length=30, blank=True, null=True)
+    nickname = models.CharField(max_length=30, blank=True, null=True)
     otp = models.CharField(max_length=9, blank=True, null=True)
     validated = models.BooleanField(default=False, help_text = 'True means user has a validated otp correctly in second API')
 

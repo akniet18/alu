@@ -5,5 +5,8 @@ urlpatterns = [
     path("create", product.as_view()),
     path('filter', getProduct.as_view({'get': 'list'})),
 
-    path("favorites/<id>", product.as_view())
+    path("favorites/<id>", favorites.as_view()),
+
+    path('publish/<id>', ProductPublish.as_view()),
+    path('publish', ProductPublish.as_view())
 ]

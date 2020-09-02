@@ -6,6 +6,7 @@ User = get_user_model()
 
 class PhoneS(serializers.Serializer):
     phone = serializers.CharField(max_length=15)
+    name = serializers.CharField(required=False)
 
 class RegisterSerializer(serializers.Serializer):
     phone = serializers.CharField(max_length=15)

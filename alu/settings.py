@@ -39,10 +39,12 @@ INSTALLED_APPS = [
     'categories',
     'products',
     'locations',
+    'basket',
 
     'rest_framework',
     'rest_framework.authtoken',
-    'django_filters'
+    'django_filters',
+    'django_celery_beat'
 ]
 
 MIDDLEWARE = [
@@ -125,13 +127,27 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Almaty'
 
 USE_I18N = True
 
 USE_L10N = True
 
 USE_TZ = True
+
+CELERY_BROKER_URL = 'redis://localhost:6379'
+# If time zones are active (USE_TZ = True) define your local 
+CELERY_TIMEZONE = 'Asia/Almaty'
+# app.conf.enable_utc = False # so celery doesn't take utc by default
+# We're going to have our tasks rolling soon, so that will be handy 
+from celery.task.schedules import crontab
+
+CELERY_BEAT_SCHEDULE = {
+    'send-notification-on-friday-afternoon': { 
+        'task': 'basket.tasks.send_notification', 
+        'schedule': 30,
+    },          
+}
 
 
 REST_FRAMEWORK = {
