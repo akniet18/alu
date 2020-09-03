@@ -14,7 +14,13 @@ class Rented(models.Model):
     count_day = models.IntegerField()
     rented_day = models.DateField(blank=True, null=True)
     deadline = models.DateField(blank=True, null=True)
+
     get_product = models.SmallIntegerField(choices=TYPE_GET_PRODUCT, blank=True, null=True)
+    return_product = models.SmallIntegerField(choices=TYPE_GET_PRODUCT, blank=True, null=True)
+
+    get_address = models.TextField(blank=True, null=True)
+    return_address = models.TextField(blank=True, null=True)
+
     is_rented = models.BooleanField(default=False, blank=True, null=True)
     is_ended = models.BooleanField(default=False, blank=True, null=True)
 

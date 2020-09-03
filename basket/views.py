@@ -58,12 +58,18 @@ class rentedApi(APIView):
             p = s.validated_data['product']
             count_day = s.validated_data['count_day']
             get_product = s.validated_data['get_product']
+            return_product = s.validated_data['return_product']
+            get_address = s.validated_data.get("get_address", None)
+            return_address = s.validated_data.get("return_address", None)
             
             Rented.objects.create(
                 product = p,
                 user = request.user,
                 count_day = count_day,
-                get_product = get_product
+                get_product = get_product,
+                return_product = return_product,
+                return_address = return_address,
+                get_address = get_address
             )
             return Response({'status': 'ok'})
         else:

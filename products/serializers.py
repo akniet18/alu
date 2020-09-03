@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import *
 from django.contrib.auth import get_user_model
-
+from locations.serializers import *
 User = get_user_model()
 
 
@@ -17,6 +17,8 @@ class ProductSerializer(serializers.Serializer):
     
 
 class getProductSerializer(serializers.ModelSerializer):
+    location = LocationSerializer()
+    location2 = LocationSerializer()
     class Meta:
         model = Product
         fields = '__all__'
