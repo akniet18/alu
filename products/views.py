@@ -21,8 +21,10 @@ class getProduct(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny,]
     queryset = Product.objects.filter(is_publish=True)
     serializer_class = getProductSerializer
-    filter_backends = [DjangoFilterBackend]
-    filter_fields = ('category','subcategory', 'subcategory2', "price")
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    search_fields = ('title',)
+    filter_fields = ('category','subcategory', 'subcategory2', "price_14", "price_30")
+    
 
     def get_queryset(self):
         # user = self.request.user
@@ -32,10 +34,11 @@ class getProduct(viewsets.ModelViewSet):
         minheight = self.request.GET.get('minprice')
         maxheight = self.request.GET.get('maxprice')
         if(minheight and maxheight):
-            return self.queryset.filter(price__gte=minheight, price__lte=maxheight)
+            return self.queryset.filter(price_14__gte=minheight, price_14__lte=maxheight)
         return self.queryset
 
 
+# product create
 class product(APIView):
     permission_classes = [permissions.IsAuthenticated,]
 
@@ -44,20 +47,29 @@ class product(APIView):
         if s.is_valid():
             # print(s.validated_data)
             title = s.validated_data['title']
-            price = s.validated_data['price']
+            price_14 = s.validated_data['price_14']
+            price_30 = s.validated_data['price_30']
             phones = s.validated_data['phones']
             images = s.validated_data['product_image']
-            address = s.validated_data['address']
+            address1 = s.validated_data['address1']
+            address2 = s.validated_data['address2']
+            city = City.objects.get(id=1)
             location, created = Location.objects.get_or_create(
-                city = City.objects.get(id=1),
-                address = address
+                city = city,
+                address = address1
+            )
+            location2, created2 = Location.objects.get_or_create(
+                city = city,
+                address = address2
             )
             p = Product.objects.create(
                 title = title,
-                price = price,
+                price_14 = price_14,
+                price_30 = price_30,
                 phones = phones,
                 owner = request.user,
-                location = location
+                location = location,
+                location2 = location2
             )
             for i in images:
                 img = compress_image(i, (200, 200))
@@ -98,6 +110,7 @@ class ProductPublish(APIView):
             return Response({"status": "ok"})
         else:
             return Response(s.errors)
+            
 
 class GetProductPublish(APIView):
     permission_classes = (permissions.IsAuthenticated,)

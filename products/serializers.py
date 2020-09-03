@@ -9,9 +9,11 @@ class ProductSerializer(serializers.Serializer):
     phones = serializers.ListField(child = serializers.CharField())
     product_image = serializers.ListField(child=serializers.ImageField())
     title = serializers.CharField()
-    price = serializers.IntegerField()
+    price_14 = serializers.IntegerField()
+    price_30 = serializers.IntegerField()
     # city = 
-    address = serializers.CharField()
+    address1 = serializers.CharField()
+    address2 = serializers.CharField()
     
 
 class getProductSerializer(serializers.ModelSerializer):

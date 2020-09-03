@@ -3,10 +3,12 @@ from django.contrib.postgres.fields import ArrayField
 
 class Product(models.Model):
     title = models.CharField(max_length=150)
-    price = models.IntegerField()
+    price_14 = models.IntegerField()
+    price_30 = models.IntegerField(blank=True, null=True)
     phones = ArrayField(models.CharField(max_length=50),  10)
     # 
-    location = models.ForeignKey("locations.Location", on_delete=models.CASCADE, null=True, blank=True)
+    location = models.ForeignKey("locations.Location", on_delete=models.CASCADE, null=True, blank=True, related_name="location_pr")
+    location2 = models.ForeignKey("locations.Location", on_delete=models.CASCADE, null=True, blank=True, related_name="location_pr2")
     # 
     category = models.ForeignKey("categories.category", on_delete=models.SET_NULL, null=True, blank=True)
     subcategory = models.ForeignKey("categories.subcategory", on_delete=models.SET_NULL, null=True, blank=True)
