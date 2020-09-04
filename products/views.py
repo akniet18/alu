@@ -14,7 +14,7 @@ from utils.compress import compress_image
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
 from locations.models import *
-
+from basket.serializers import *
 
 
 class getProduct(viewsets.ModelViewSet):
@@ -85,13 +85,22 @@ class product(APIView):
 class favorites(APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
-    def get(self, request, id):
-        product = Product.objects.get(id=id)
-        if product in request.user.favorites.all():
-            request.user.favorites.remove(product)
+    def get(self, request):
+        queryset = request.user.favorites.all()
+        s = getProductSerializer(queryset, many = True)
+        return Response(s.data)
+
+    def post(self, request):
+        s = productIdSer(data=request.data)
+        if s.is_valid():
+            product = Product.objects.get(id=s.validated_data['product'])
+            if product in request.user.favorites.all():
+                request.user.favorites.remove(product)
+            else:
+                request.user.favorites.add(product)
+            return Response({'status': 'ok'})
         else:
-            request.user.favorites.add(product)
-        return Response({'status': 'ok'})
+            return Response(s.errors)
 
 
 class ProductPublish(APIView):

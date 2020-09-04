@@ -5,7 +5,7 @@ from products.serializers import *
 User = get_user_model()
 
 
-class createBasketSer(serializers.Serializer):
+class productIdSer(serializers.Serializer):
     product = serializers.IntegerField()
 
 

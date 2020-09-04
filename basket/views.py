@@ -22,7 +22,7 @@ class BasketView(APIView):
         return Response(s.data)
     
     def post(self, request):
-        s = createBasketSer(data=request.data)
+        s = productIdSer(data=request.data)
         if s.is_valid():
             product = Product.objects.get(id=s.validated_data['product'])
             if product in request.user.basket.all():
