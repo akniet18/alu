@@ -166,6 +166,32 @@ class detailUser(APIView):
 
 
 
+class login_admin(APIView):
+    permission_classes = [permissions.AllowAny,]
+
+    def post(self, request):
+        s = LoginAdminSerializer(data=request.data)
+        if s.is_valid():
+            phone = s.validated_data['phone']
+            password = s.validated_data['password']
+            if User.objects.filter(phone=phone, is_staff=True).exists():
+                us = User.objects.get(phone=phone)
+                if us.check_password(password):
+                    us = us
+                else:
+                    return Response({'status': 'error'})
+            else:
+                return Response({'status': 'error'})
+            if Token.objects.filter(user=us).exists():
+                token = Token.objects.get(user=us)
+            else:
+                token = Token.objects.create(user=us)
+            # django_login(request, us)
+            return Response({'key': token.key, 'uid': us.pk})
+        else:
+            return Response(s.errors)
+
+
 class admin_side_get_view(APIView):
     permission_classes = [permissions.IsAuthenticated, ]
 
