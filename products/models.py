@@ -3,6 +3,7 @@ from django.contrib.postgres.fields import ArrayField
 
 class Product(models.Model):
     title = models.CharField(max_length=150)
+    about = models.TextField(blank=True, null=True)
     price_14 = models.IntegerField()
     price_30 = models.IntegerField(blank=True, null=True)
     phones = ArrayField(models.CharField(max_length=50),  10)

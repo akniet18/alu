@@ -9,6 +9,7 @@ class ProductSerializer(serializers.Serializer):
     phones = serializers.ListField(child = serializers.CharField())
     product_image = serializers.ListField(child=serializers.CharField())
     title = serializers.CharField()
+    about = serializers.CharField()
     price_14 = serializers.IntegerField()
     price_30 = serializers.IntegerField()
     # city = 

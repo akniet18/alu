@@ -47,6 +47,7 @@ class product(APIView):
         if s.is_valid():
             # print(s.validated_data)
             title = s.validated_data['title']
+            about = s.validated_data['about']
             price_14 = s.validated_data['price_14']
             price_30 = s.validated_data['price_30']
             phones = s.validated_data['phones']
@@ -59,6 +60,7 @@ class product(APIView):
             )
             p = Product.objects.create(
                 title = title,
+                about = about,
                 price_14 = price_14,
                 price_30 = price_30,
                 phones = phones,
