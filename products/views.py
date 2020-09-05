@@ -10,7 +10,7 @@ from rest_framework.decorators import permission_classes
 from rest_framework import viewsets, generics
 from rest_framework.generics import RetrieveUpdateDestroyAPIView, GenericAPIView, RetrieveUpdateAPIView
 from datetime import datetime
-from utils.compress import compress_image
+from utils.compress import *
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
 from locations.models import *
@@ -51,16 +51,11 @@ class product(APIView):
             price_30 = s.validated_data['price_30']
             phones = s.validated_data['phones']
             images = s.validated_data['product_image']
-            address1 = s.validated_data['address1']
-            address2 = s.validated_data['address2']
+            address1 = s.validated_data['address']
             city = City.objects.get(id=1)
             location, created = Location.objects.get_or_create(
                 city = city,
                 address = address1
-            )
-            location2, created2 = Location.objects.get_or_create(
-                city = city,
-                address = address2
             )
             p = Product.objects.create(
                 title = title,
@@ -69,15 +64,15 @@ class product(APIView):
                 phones = phones,
                 owner = request.user,
                 location = location,
-                location2 = location2
             )
-            for i in images:
-                img = compress_image(i, (200, 200))
+            for i, val in enumerate(images):
+                im = base64img(val, str(p.id)+str(i))
+                img = compress_image(im, (200, 200))
                 ProductImage.objects.create(
                     product = p,
                     image = img
                 )
-            return Response({'status': "ok"})
+            return Response({'status': "ok"}) 
         else:
             return Response(s.errors)
 

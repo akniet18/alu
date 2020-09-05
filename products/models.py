@@ -8,7 +8,6 @@ class Product(models.Model):
     phones = ArrayField(models.CharField(max_length=50),  10)
     # 
     location = models.ForeignKey("locations.Location", on_delete=models.CASCADE, null=True, blank=True, related_name="location_pr")
-    location2 = models.ForeignKey("locations.Location", on_delete=models.CASCADE, null=True, blank=True, related_name="location_pr2")
     # 
     category = models.ForeignKey("categories.category", on_delete=models.SET_NULL, null=True, blank=True)
     subcategory = models.ForeignKey("categories.subcategory", on_delete=models.SET_NULL, null=True, blank=True)
