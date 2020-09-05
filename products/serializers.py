@@ -17,7 +17,6 @@ class ProductSerializer(serializers.Serializer):
 
 class getProductSerializer(serializers.ModelSerializer):
     location = LocationSerializer()
-    location2 = LocationSerializer()
     class Meta:
         model = Product
         fields = '__all__'
