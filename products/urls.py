@@ -8,5 +8,7 @@ urlpatterns = [
     path("favorites", favorites.as_view()),
 
     path('publish/<id>', ProductPublish.as_view()),
-    path('publish', ProductPublish.as_view())
+    # path('publish', ProductPublish.as_view()),
+
+    path("admin/get", GetProductPublish.as_view())
 ]
