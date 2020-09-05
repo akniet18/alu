@@ -14,10 +14,15 @@ class ProductSerializer(serializers.Serializer):
     price_30 = serializers.IntegerField()
     # city = 
     address = serializers.CharField()
-    
+
+class ProductImageSer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductImage
+        fields = "__all__"
 
 class getProductSerializer(serializers.ModelSerializer):
     location = LocationSerializer()
+    product_image = ProductImageSer(many=True)
     class Meta:
         model = Product
         fields = '__all__'
