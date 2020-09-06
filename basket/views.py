@@ -18,7 +18,7 @@ class BasketView(APIView):
 
     def get(self, request):
         queryset = request.user.basket.all()
-        s = getProductSerializer(queryset, many=True)
+        s = getProductSerializer(queryset, many=True, context={'request': request})
         return Response(s.data)
     
     def post(self, request):
