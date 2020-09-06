@@ -16,9 +16,16 @@ class ProductSerializer(serializers.Serializer):
     address = serializers.CharField()
 
 class ProductImageSer(serializers.ModelSerializer):
+    image = serializers.SerializerMethodField('get_image_url')
+
+    def get_image_url(self, obj):
+        return self.context['request'].build_absolute_uri(obj.image.url)
     class Meta:
         model = ProductImage
         fields = "__all__"
+
+
+
 
 class getProductSerializer(serializers.ModelSerializer):
     location = LocationSerializer()

@@ -40,7 +40,7 @@ class rentedApi(APIView):
 
     def get(self, request):
         queryset = Rented.objects.filter(user=request.user, is_rented=True, is_ended=False)
-        serializer_class = rentedSerializer(queryset, many=True)
+        serializer_class = rentedSerializer(queryset, many=True, context={'request': request})
         for i in serializer_class.data:
             deadline = datetime.strptime(i['deadline'], '%Y-%m-%d')
             if datetime.now() < deadline:
@@ -81,7 +81,7 @@ class MyRentedProduct(APIView):
 
     def get(self, request):
         products = Rented.objects.filter(product__owner=request.user, is_rented=True, is_ended=False)
-        serializer = rentedSerializer(products, many=True)
+        serializer = rentedSerializer(products, many=True, context={'request': request})
         for i in serializer.data:
             deadline = datetime.strptime(i['deadline'], '%Y.%m.%d')
             if datetime.now() < deadline:
@@ -123,7 +123,7 @@ class adminNewRentedApi(APIView):
 
     def get(self, request):
         queryset = Rented.objects.filter(is_rented=False, is_ended=False, is_checked=False)
-        serializer_class = rentedSerializer(queryset, many=True)
+        serializer_class = rentedSerializer(queryset, many=True, context={'request': request})
         return Response(serializer_class.data)
 
     def post(self, request):
@@ -145,7 +145,7 @@ class adminRentedApi(APIView):
 
     def get(self, request):
         queryset = Rented.objects.filter(is_rented=True, is_ended=False, is_checked=True)
-        serializer_class = rentedSerializer(queryset, many=True)
+        serializer_class = rentedSerializer(queryset, many=True, context={'request': request})
         for i in serializer_class.data:
             deadline = datetime.strptime(i['deadline'], '%Y-%m-%d')
             if datetime.now() < deadline:
@@ -163,7 +163,7 @@ class DeliverToPickUp(APIView):
 
     def get(self, request):
         queryset = Rented.objects.filter(is_rented=False, is_ended=False, is_checked=True)
-        serializer_class = rentedSerializer(queryset, many=True)
+        serializer_class = rentedSerializer(queryset, many=True, context={'request': request})
         return Response(serializer_class.data)
 
     def post(self, request):

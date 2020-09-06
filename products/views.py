@@ -43,7 +43,7 @@ class recomendations(APIView):
 
     def get(self, request):
         queryset = Product.objects.filter(is_publish=True).order_by("-publish_date")
-        serializer_class = getProductSerializer(queryset, many=True)
+        serializer_class = getProductSerializer(queryset, many=True, context={'request': request})
         return Response(serializer_class.data)
 
    
@@ -95,7 +95,7 @@ class favorites(APIView):
 
     def get(self, request):
         queryset = request.user.favorites.all()
-        s = getProductSerializer(queryset, many = True)
+        s = getProductSerializer(queryset, many = True, context={'request': request})
         return Response(s.data)
 
     def post(self, request):
@@ -134,6 +134,6 @@ class GetProductPublish(APIView):
 
     def get(self, request):
         p = Product.objects.filter(is_publish=False)
-        s = getProductSerializer(p, many=True)
+        s = getProductSerializer(p, many=True, context={'request': request})
         return Response(s.data)
 
