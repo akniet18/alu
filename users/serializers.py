@@ -16,10 +16,8 @@ class RegisterSerializer(serializers.Serializer):
     code = serializers.CharField()
 
 
-class AvatarSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ("avatar",)
+class AvatarSerializer(serializers.Serializer):
+    avatar = serializers.CharField()
 
 
 class UserSerializer(serializers.ModelSerializer):

@@ -16,7 +16,7 @@ from rest_framework import viewsets, generics
 from rest_framework.generics import RetrieveUpdateDestroyAPIView, GenericAPIView, RetrieveUpdateAPIView
 from datetime import datetime
 from products.models import *
-from utils.compress import compress_image
+from utils.compress import *
 # from django_auto_prefetching import AutoPrefetchViewSetMixin
 
 
@@ -138,7 +138,8 @@ class Avatar(APIView):
         s = AvatarSerializer(data=request.data)
         if s.is_valid():
             ava = s.validated_data['avatar']
-            avatar = compress_image(ava, (200, 200))
+            img = base64img(ava, 'avatar')
+            avatar = compress_image(img, (200, 200))
             request.user.avatar = avatar
             request.user.save()
             return Response({'status': "ok", "avatar": request.user.avatar.url})
