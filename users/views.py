@@ -152,7 +152,7 @@ class detailUser(APIView):
 
     def get(self, request, id):
         u = User.objects.get(id = id)
-        s = UserSerializer(u)
+        s = UserSerializer(u, context={'request': request})
         return Response(s.data)
 
     def post(self, request, id):

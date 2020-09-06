@@ -21,6 +21,10 @@ class AvatarSerializer(serializers.Serializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+    avatar = serializers.SerializerMethodField('get_avatar_url')
+
+    def get_avatar_url(self, obj):
+        return self.context['request'].build_absolute_uri(obj.avatar.url)
     class Meta:
         model = User
         fields = ("avatar","nickname", "phone")
