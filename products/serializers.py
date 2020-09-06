@@ -32,3 +32,4 @@ class ProductPublishSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ('category', 'subcategory', 'subcategory2')
+

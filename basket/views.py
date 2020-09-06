@@ -107,9 +107,6 @@ class AcceptOrRejectRent(APIView):
                 r.rented_day = datetime.now()
                 r.deadline = datetime.now() + timedelta(r.count_day)
                 r.save()
-                p = r.product
-                p.is_rented = True
-                p.save()
             elif action == "return":
                 r.is_ended = True
                 r.save()
@@ -121,3 +118,72 @@ class AcceptOrRejectRent(APIView):
             return Response(s.errors)
 
 
+class adminNewRentedApi(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request):
+        queryset = Rented.objects.filter(is_rented=False, is_ended=False, is_checked=False)
+        serializer_class = rentedSerializer(queryset, many=True)
+        return Response(serializer_class.data)
+
+    def post(self, request):
+        s = productIdSer(data=request.data)
+        if s.is_valid():
+            r = Rented.objects.get(id=s.validated_data['product'])
+            r.is_checked = True
+            r.save()
+            p = r.product
+            p.is_rented = True
+            p.save()
+            return Response({"status": "ok"})
+        else:
+            return Response(s.errors)
+
+
+class adminRentedApi(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request):
+        queryset = Rented.objects.filter(is_rented=True, is_ended=False, is_checked=True)
+        serializer_class = rentedSerializer(queryset, many=True)
+        for i in serializer_class.data:
+            deadline = datetime.strptime(i['deadline'], '%Y-%m-%d')
+            if datetime.now() < deadline:
+                days_left = datetime.now()-deadline
+                # print(abs(days_left.days))
+                i['days_left'] = abs(days_left.days)
+            else:
+                i['days_left'] = "deadline"
+        return Response(serializer_class.data)
+
+
+
+class DeliverToPickUp(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request):
+        queryset = Rented.objects.filter(is_rented=False, is_ended=False, is_checked=True)
+        serializer_class = rentedSerializer(queryset, many=True)
+        return Response(serializer_class.data)
+
+    def post(self, request):
+        s = productIdSer(data=request.data)
+        if s.is_valid():
+            owner = Rented.objects.get(id=s.validated_data['product']).product.owner
+            return Response({'status': 'ok'})
+        else:
+            return Response(s.errors)
+
+
+class setDateToPickUp(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def post(self, request):
+        s = setDateSer(data=request.data)
+        if s.is_valid():
+            r = Rented.objects.get(id=s.validated_data['id'])
+            r.get_date = s.validated_data['date']
+            r.save()
+            return Response({'status': "ok"})
+        else:
+            return Response(s.errors)

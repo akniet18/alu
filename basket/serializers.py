@@ -26,3 +26,8 @@ class CreaterentedSerializer(serializers.ModelSerializer):
 class RentedActionSerializer(serializers.Serializer):
     action = serializers.CharField()
     id=serializers.IntegerField()
+
+
+class setDateSer(serializers.Serializer):
+    id = serializers.IntegerField()
+    date = serializers.DateTimeField()

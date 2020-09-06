@@ -38,6 +38,17 @@ class getProduct(viewsets.ModelViewSet):
         return self.queryset
 
 
+class recomendations(APIView):
+    permission_classes = [permissions.AllowAny,]
+
+    def get(self, request):
+        queryset = Product.objects.filter(is_publish=True).order_by("-publish_date")
+        serializer_class = getProductSerializer(queryset, many=True)
+        return Response(serializer_class.data)
+
+   
+
+
 # product create
 class product(APIView):
     permission_classes = [permissions.IsAuthenticated,]
