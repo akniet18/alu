@@ -9,9 +9,9 @@ class Rented(models.Model):
         (TYPE_PICKUP, 'Самовывоз')
     )
 
-    product = models.ForeignKey("products.Product", on_delete=models.CASCADE, related_name="rented_product")
+    product = models.ManyToManyField("products.Product", blank=True, related_name="rented_obj")
     user = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="i_rent")
-    count_day = models.IntegerField()
+    amount = models.IntegerField()
     rented_day = models.DateField(blank=True, null=True)
     deadline = models.DateField(blank=True, null=True)
 
@@ -29,5 +29,5 @@ class Rented(models.Model):
     is_ended = models.BooleanField(default=False, blank=True, null=True)
 
     def __str__(self):
-        return "user {}, {}".format(self.user.phone, self.product.title)
+        return "user {}".format(self.user.phone)
 

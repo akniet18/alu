@@ -55,22 +55,26 @@ class rentedApi(APIView):
         s = CreaterentedSerializer(data=request.data)
         if s.is_valid():
             print(s.validated_data)
-            p = s.validated_data['product']
-            count_day = s.validated_data['count_day']
+            p = s.validated_data['products']
             get_product = s.validated_data['get_product']
             return_product = s.validated_data['return_product']
+            amount = s.validated_data['amount']
             get_address = s.validated_data.get("get_address", None)
             return_address = s.validated_data.get("return_address", None)
-            
-            Rented.objects.create(
-                product = p,
+            r = Rented.objects.create(
                 user = request.user,
-                count_day = count_day,
                 get_product = get_product,
                 return_product = return_product,
                 return_address = return_address,
-                get_address = get_address
+                get_address = get_address,
+                amount = amount
             )
+            for i in p:
+                p = Product.objects.get(id=i['id'])
+                p.count_day = i['count_day']
+                p.save()
+                r.product.add(p)
+                r.save() 
             return Response({'status': 'ok'})
         else:
             return Response(s.errors)
@@ -80,17 +84,19 @@ class MyRentedProduct(APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request):
-        products = Rented.objects.filter(product__owner=request.user, is_rented=True, is_ended=False)
-        serializer = rentedSerializer(products, many=True, context={'request': request})
-        for i in serializer.data:
-            deadline = datetime.strptime(i['deadline'], '%Y.%m.%d')
-            if datetime.now() < deadline:
-                days_left = datetime.now()-deadline
-                # print(abs(days_left.days))
-                i['days_left'] = abs(days_left.days)
-            else:
-                i['days_left'] = "deadline"
-        return Response(serializer.data)
+        products = Product.objects.filter(owner=request.user)
+        for i in products:
+            print(i.rented_obj.all())
+        s = getProductSerializer(products, many=True, context={'request': request})
+        # for i in serializer.data:
+        #     deadline = datetime.strptime(i['deadline'], '%Y.%m.%d')
+        #     if datetime.now() < deadline:
+        #         days_left = datetime.now()-deadline
+        #         # print(abs(days_left.days))
+        #         i['days_left'] = abs(days_left.days)
+        #     else:
+        #         i['days_left'] = "deadline"
+        return Response(s.data)
 
 
 

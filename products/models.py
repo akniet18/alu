@@ -19,11 +19,13 @@ class Product(models.Model):
     is_publish = models.BooleanField(default=False, blank=True, null=True)
     is_rented = models.BooleanField(default=False, blank=True)
     # 
+    count_day = models.IntegerField(blank=True, null=True)
+    # 
     publish_date = models.DateField(auto_now=False, auto_now_add=False, blank=True, null=True)
     created_date = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     
     def __str__(self):
-        return self.title
+        return self.title + ", " + str(self.id)
     
 
 def product_photos_dir(instanse, filename):
