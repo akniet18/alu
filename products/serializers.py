@@ -25,11 +25,13 @@ class ProductImageSer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-
+class categorySer(serializers.Serializer):
+    name = serializers.CharField()
 
 class getProductSerializer(serializers.ModelSerializer):
     location = LocationSerializer()
     product_image = ProductImageSer(many=True)
+    subcategory = categorySer()
     class Meta:
         model = Product
         fields = '__all__'
