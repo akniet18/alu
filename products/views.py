@@ -11,11 +11,12 @@ from rest_framework import viewsets, generics
 from rest_framework.generics import RetrieveUpdateDestroyAPIView, GenericAPIView, RetrieveUpdateAPIView
 from datetime import datetime
 from utils.compress import *
+from utils.messages import *
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
 from locations.models import *
 from basket.serializers import *
-
+from message.models import Message
 
 class getProduct(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny,]
@@ -62,7 +63,7 @@ class product(APIView):
             price_14 = s.validated_data['price_14']
             price_30 = s.validated_data['price_30']
             phones = s.validated_data['phones']
-            images = s.validated_data['product_image']
+            images = s.validated_data.get('product_image', None)
             address1 = s.validated_data['address']
             city = City.objects.get(id=1)
             location, created = Location.objects.get_or_create(
@@ -78,13 +79,14 @@ class product(APIView):
                 owner = request.user,
                 location = location,
             )
-            for i, val in enumerate(images):
-                im = base64img(val, str(p.id)+str(i))
-                img = compress_image(im, (200, 200))
-                ProductImage.objects.create(
-                    product = p,
-                    image = img
-                )
+            if images:
+                for i, val in enumerate(images):
+                    im = base64img(val, str(p.id)+str(i))
+                    img = compress_image(im, (200, 200))
+                    ProductImage.objects.create(
+                        product = p,
+                        image = img
+                    )
             return Response({'status': "ok"}) 
         else:
             return Response(s.errors)
@@ -124,6 +126,11 @@ class ProductPublish(APIView):
             product.is_publish = True
             product.publish_date = datetime.now()
             product.save()
+            Message.objects.create(
+                user = product.owner,
+                action = 1,
+                text = product_publish(product.title)
+            )
             return Response({"status": "ok"})
         else:
             return Response(s.errors)

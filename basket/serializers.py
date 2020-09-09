@@ -35,3 +35,7 @@ class RentedActionSerializer(serializers.Serializer):
 class setDateSer(serializers.Serializer):
     id = serializers.IntegerField()
     date = serializers.DateTimeField()
+
+class OrderidSer(serializers.Serializer):
+    order_id = serializers.IntegerField()
+    

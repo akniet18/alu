@@ -21,7 +21,8 @@ class Rented(models.Model):
     get_address = models.TextField(blank=True, null=True)
     return_address = models.TextField(blank=True, null=True)
 
-    get_date = models.DateField(blank=True, null=True)
+    get_date = models.DateTimeField(blank=True, null=True)
+    return_date = models.DateTimeField(blank=True, null=True)
 
     is_checked = models.BooleanField(default=False, blank=True, null=True)
     is_rented = models.BooleanField(default=False, blank=True, null=True)
@@ -29,5 +30,5 @@ class Rented(models.Model):
     is_ended = models.BooleanField(default=False, blank=True, null=True)
 
     def __str__(self):
-        return "user {}".format(self.user.phone)
+        return "id {}, user {}".format(self.id,self.user.phone)
 

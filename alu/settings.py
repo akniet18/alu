@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'products',
     'locations',
     'basket',
+    'message',
 
     'corsheaders',
     'rest_framework',

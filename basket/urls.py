@@ -12,5 +12,8 @@ urlpatterns = [
     path("rent/action", AcceptOrRejectRent.as_view()),
     path("pickUp", DeliverToPickUp.as_view()),
 
-    path("set/date", setDateToPickUp.as_view())
+    path("inStock", inStock.as_view()),
+
+    path("deliver", deliver.as_view()),
+    path("deliver/push", ToDeliverDate.as_view())
 ]

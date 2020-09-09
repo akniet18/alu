@@ -7,7 +7,7 @@ User = get_user_model()
 
 class ProductSerializer(serializers.Serializer):
     phones = serializers.ListField(child = serializers.CharField())
-    product_image = serializers.ListField(child=serializers.CharField())
+    product_image = serializers.ListField(child=serializers.CharField(), required=False)
     title = serializers.CharField()
     about = serializers.CharField()
     price_14 = serializers.IntegerField()

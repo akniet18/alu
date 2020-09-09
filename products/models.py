@@ -18,8 +18,11 @@ class Product(models.Model):
     # 
     is_publish = models.BooleanField(default=False, blank=True, null=True)
     is_rented = models.BooleanField(default=False, blank=True)
+    in_stock = models.BooleanField(default=False, blank=True)
     # 
     count_day = models.IntegerField(blank=True, null=True)
+    get_date = models.DateTimeField(blank=True, null=True)
+    return_date = models.DateTimeField(blank=True, null=True)
     # 
     publish_date = models.DateField(auto_now=False, auto_now_add=False, blank=True, null=True)
     created_date = models.DateTimeField(auto_now_add=True, blank=True, null=True)
