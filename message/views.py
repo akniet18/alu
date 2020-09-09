@@ -22,7 +22,7 @@ class MessageApi(APIView):
 
     def get(self, request):
         queryset = Message.objects.filter(user=request.user).order_by('-created')
-        ser = MessageSer(queryset, many=True)
+        # ser = MessageSer(queryset, many=True)
         data = []
         for i in queryset:
             data.append({
