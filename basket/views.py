@@ -228,7 +228,7 @@ class inStock(APIView):
     def post(self, request):
         s = productIdSer(data=request.data)
         if s.is_valid():
-            r = Product.objects.get(id=s.validated_data['id'])
+            r = Product.objects.get(id=s.validated_data['product'])
             r.in_stock = True
             r.save()
             return Response({'status': "ok"})

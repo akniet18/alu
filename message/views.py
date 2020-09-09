@@ -23,6 +23,10 @@ class MessageApi(APIView):
     def get(self, request):
         queryset = Message.objects.filter(user=request.user).order_by('-created')
         ser = MessageSer(queryset, many=True)
+        # for i in queryset:
+        #     if i.action == 1:
+        #         i.is_readed = True
+        #         i.save()
         return Response(ser.data)
 
     def post(self, request):
