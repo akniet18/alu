@@ -21,7 +21,7 @@ class MessageApi(APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request):
-        queryset = Message.objects.filter(user=request.user)
+        queryset = Message.objects.filter(user=request.user).order_by('-created')
         ser = MessageSer(queryset, many=True)
         return Response(ser.data)
 
@@ -29,6 +29,8 @@ class MessageApi(APIView):
         s = PostMessageSer(data = request.data)
         if s.is_valid():
             m = Message.objects.get(id=s.validated_data['id'])
+            m.is_readed = True
+            
             date = s.validated_data.get('date', None)
             leave = s.validated_data.get('leave', None)
             if date is not None:
@@ -45,6 +47,7 @@ class MessageApi(APIView):
                         m.order.return_date = date
                     m.order.save()
             # if leave:
+            m.save()
             return Response({"status": "ok"})            
         else:
             return Response(s.errors)

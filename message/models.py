@@ -10,6 +10,7 @@ class Message(models.Model):
     product = models.ForeignKey("products.Product", on_delete=models.CASCADE, null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     get_or_return = models.IntegerField(null=True, blank=True)
+    is_readed = models.BooleanField(default=False, blank=True)
 
     def __str__(self):
         return self.user.phone + ", " + str(self.id)
