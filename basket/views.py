@@ -113,7 +113,7 @@ class AcceptOrRejectRent(APIView):
             if action == "accept":
                 r.is_rented = True
                 r.rented_day = datetime.now()
-                r.deadline = datetime.now() + timedelta(r.count_day)
+                # r.deadline = datetime.now() + timedelta(r.count_day)
                 r.save()
             elif action == "return":
                 r.is_ended = True
@@ -184,13 +184,15 @@ class adminRentedApi(APIView):
         queryset = Rented.objects.filter(is_rented=True, is_ended=False, is_checked=True)
         serializer_class = rentedSerializer(queryset, many=True, context={'request': request})
         for i in serializer_class.data:
-            deadline = datetime.strptime(i['deadline'], '%Y-%m-%d')
-            if datetime.now() < deadline:
-                days_left = datetime.now()-deadline
-                # print(abs(days_left.days))
-                i['days_left'] = abs(days_left.days)
-            else:
-                i['days_left'] = "deadline"
+            rented = datetime.strptime(i['rented_day'], '%Y-%m-%d')
+            for j in i['product']:
+                deadline = rented + timedelta(j['count_day'])
+                if datetime.now() < deadline:
+                    days_left = datetime.now()-deadline
+                    # print(abs(days_left.days))
+                    j['days_left'] = abs(days_left.days)
+                else:
+                    j['days_left'] = "deadline"
         return Response(serializer_class.data)
 
 

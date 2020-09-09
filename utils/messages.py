@@ -21,7 +21,7 @@ def pickUPoint(name):
     text += "Ждём Ваш выбор!\n"
     return text
 
-def deliverOne(number ,products, address):
+def deliverOne(number, products, address):
     text = "Здравствуйте!\n"
     text += "Вами оформлен заказ №{}\n".format(number)
     text += "Планируемый срок формирования заказа — от 1 до 3 дней\n"
