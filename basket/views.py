@@ -271,6 +271,6 @@ class deliver(APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request):
-        r = Rented.objects.filter(product__in_stock=True)
+        r = Rented.objects.filter(product__in_stock=True, is_rented=False)
         s = rentedSerializer(r, many=True, context={'request': request})
         return Response(s.data)
