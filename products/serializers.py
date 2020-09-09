@@ -3,7 +3,7 @@ from .models import *
 from django.contrib.auth import get_user_model
 from locations.serializers import *
 User = get_user_model()
-
+from users.serializers import UserSerializer
 
 class ProductSerializer(serializers.Serializer):
     phones = serializers.ListField(child = serializers.CharField())
@@ -32,6 +32,7 @@ class getProductSerializer(serializers.ModelSerializer):
     location = LocationSerializer()
     product_image = ProductImageSer(many=True)
     subcategory = categorySer()
+    owner = UserSerializer()
     class Meta:
         model = Product
         fields = '__all__'
