@@ -140,21 +140,21 @@ class adminNewRentedApi(APIView):
             r = Rented.objects.get(id=s.validated_data['product'])
             r.is_checked = True
             r.save()
-            for i in r.product:
+            for i in r.product.all():
                 p = i
                 p.is_rented = True
                 p.save()
             if r.get_product == 1:
                 Message.objects.create(
                     user = r.user,
-                    text = deliverOne(r.id, r.product, r.get_address),
+                    text = deliverOne(r.id, r.product.all(), r.get_address),
                     action = 1,
                     order = r
                 )
             else:
                 Message.objects.create(
                     user = r.user,
-                    text = PickupOne(r.id, r.product),
+                    text = PickupOne(r.id, r.product.all()),
                     action = 1,
                     order = r
                 )
