@@ -43,13 +43,15 @@ class rentedApi(APIView):
         queryset = Rented.objects.filter(user=request.user, is_rented=True, is_ended=False)
         serializer_class = rentedSerializer(queryset, many=True, context={'request': request})
         for i in serializer_class.data:
-            deadline = datetime.strptime(i['deadline'], '%Y-%m-%d')
-            if datetime.now() < deadline:
-                days_left = datetime.now()-deadline
-                # print(abs(days_left.days))
-                i['days_left'] = abs(days_left.days)
-            else:
-                i['days_left'] = "deadline"
+            rented = datetime.strptime(i['rented_day'], '%Y-%m-%d')
+            for j in i['product']:
+                deadline = rented + timedelta(j['count_day'])
+                if datetime.now() < deadline:
+                    days_left = datetime.now()-deadline
+                    # print(abs(days_left.days))
+                    j['days_left'] = abs(days_left.days)
+                else:
+                    j['days_left'] = "deadline"
         return Response(serializer_class.data)
 
     def post(self, request):
