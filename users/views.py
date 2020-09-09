@@ -39,7 +39,7 @@ class PhoneCode(APIView):
                 # a.otp = "1111"
                 a.save()
             else:
-                PhoneOTP.objects.create(phone=phone, otp=str(rand))
+                PhoneOTP.objects.create(phone=phone, otp=str(rand), nickname=nickname)
                 # PhoneOTP.objects.create(phone=phone, nickname=nickname, otp=str(1111))
             # smsc.send_sms(s.validated_data['phone'], "Код подтверждения: "+str(rand) + " Fixup", sender="sms")
             return Response({'status': 'ok'})
