@@ -17,6 +17,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from locations.models import *
 from basket.serializers import *
 from message.models import Message
+from datetime import datetime, timedelta
 
 class getProduct(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny,]
@@ -144,3 +145,70 @@ class GetProductPublish(APIView):
         s = getProductSerializer(p, many=True, context={'request': request})
         return Response(s.data)
 
+
+
+class ReturnApi(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request):
+        p = Product.objects.filter(is_rented=True, count_day__isnull=False, rented_obj__is_rented=True)
+        a = []
+        for i in p:
+            rented = datetime.strptime(str(i.rented_obj.all()[0].rented_day), '%Y-%m-%d')
+            deadline = rented + timedelta(i.count_day)
+            if datetime.now() < deadline:
+                days_left = datetime.now()-deadline
+                # print(abs(days_left.days))
+                if abs(days_left.days) == 1:
+                    a.append(i)
+            
+        s = getProductSerializer(a, many=True, context={'request': request})
+        return Response(s.data)
+
+    def post(self, request):
+        s = productIdSer(data = request.data)
+        if s.is_valid():
+            p = Product.objects.get(id=s.validated_data['product'])
+            p.is_rented = False
+            p.count_day = None
+            p.get_date = None
+            p.save()
+            r = p.rented_obj.all()[0]
+            r.is_ended = True
+            r.save()
+            return Response({'status': 'ok'})
+        else:
+            return Response(s.errors)
+
+
+def send_push():
+    p = Product.objects.filter(is_rented=True, count_day__isnull=False, rented_obj__is_rented=True)
+    a = []
+    for i in p:
+        r = i.rented_obj.all()[0]
+        rented = datetime.strptime(str(r.rented_day), '%Y-%m-%d')
+        deadline = rented + timedelta(i.count_day)
+        if datetime.now() < deadline:
+            days_left = datetime.now()-deadline
+            # print(abs(days_left.days))
+            if abs(days_left.days) == 1:
+                # a.append(i)
+                if r.return_product == 1:
+                    mid = Message.objects.create(
+                        user = r.user,
+                        text = deliverThree(i.title),
+                        action = 2,
+                        order = r,
+                        product = i,
+                        get_or_return = 2
+                    )
+                else:
+                    mid = Message.objects.create(
+                        user = r.user,
+                        text = PickupThree(i.title),
+                        action = 1,
+                        order = r,
+                        product = i,
+                        get_or_return = 2
+                    )
+    return "ok"

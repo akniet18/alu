@@ -12,4 +12,5 @@ urlpatterns = [
     # path('publish', ProductPublish.as_view()),
 
     path("admin/get", GetProductPublish.as_view()),
+    path('return', ReturnApi.as_view())
 ]

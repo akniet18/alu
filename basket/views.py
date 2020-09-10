@@ -103,7 +103,7 @@ class MyRentedProduct(APIView):
         return Response(s.data)
 
 
-
+# from .tasks import send_notifiction
 class AcceptOrRejectRent(APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
@@ -117,6 +117,7 @@ class AcceptOrRejectRent(APIView):
                 r.rented_day = datetime.now()
                 # r.deadline = datetime.now() + timedelta(r.count_day)
                 r.save()
+                # send_notifiction()
             elif action == "return":
                 r.is_ended = True
                 r.save()
@@ -149,14 +150,14 @@ class adminNewRentedApi(APIView):
             if r.get_product == 1:
                 Message.objects.create(
                     user = r.user,
-                    text = deliverOne(r.id, r.product.all(), r.get_address),
+                    text = deliverOne(r.id, r.product.all(), r.get_address, r.user.phone),
                     action = 1,
                     order = r
                 )
             else:
                 Message.objects.create(
                     user = r.user,
-                    text = PickupOne(r.id, r.product.all()),
+                    text = PickupOne(r.id, r.product.all(), r.user.phone),
                     action = 1,
                     order = r
                 )
@@ -274,3 +275,6 @@ class deliver(APIView):
         r = Rented.objects.filter(product__in_stock=True, is_rented=False)
         s = rentedSerializer(r, many=True, context={'request': request})
         return Response(s.data)
+
+
+

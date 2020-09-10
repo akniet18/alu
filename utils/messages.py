@@ -21,12 +21,12 @@ def pickUPoint(name):
     text += "Ждём Ваш выбор!*"
     return text
 
-def deliverOne(number, products, address):
+def deliverOne(number, products, address, phone):
     text = "Здравствуйте!*"
     text += "Вами оформлен заказ №{}*".format(number)
     text += "Планируемый срок формирования заказа — от 1 до 3 дней*"
     text += "Уведомления обо всех изменениях заказа и даты комплектации товаров Вы*"
-    text += "получите в разделе 'Сообщения'.*"
+    text += "получите в разделе 'Сообщения'.**"
 
     text += "Заказанные товары:*"
     summ = 0
@@ -38,13 +38,13 @@ def deliverOne(number, products, address):
             summ += i.price_30
             text += "Книга '{}' - {} на 30 дней*".format(i.title, i.price_30)
 
-    text += "Метод доставки: Курьерская доставка*"
+    text += "*Метод доставки: Курьерская доставка*"
     text += "стоимость доставки: 800 тг.*"
-    text += "Адрес доставки: {}*".format(address)
+    text += "Адрес доставки: {}**".format(address)
 
-    text += "Итого: {} тг*".format(summ)
+    text += "Итого: {} тг**".format(summ)
 
-    text += "Контактный номер,*"
+    text += "Контактный номер, {}**".format(phone)
 
     text += "Благодарим Вас за то, что Вы выбрали нашу платформу ALU.KZ! Мы рады, что*"
     text += "Вы являетесь нашим клиентом.*"
@@ -68,7 +68,7 @@ def deliverThree(name):
     return text
 
 
-def PickupOne(number, products):
+def PickupOne(number, products, phone):
     text = "Здравствуйте!*"
     text += "Вами оформлен заказ №{}*".format(number)
     text += "Планируемый срок формирования заказа — от 1 до 3 дней*"
@@ -86,12 +86,11 @@ def PickupOne(number, products):
             text += "Книга '{}' - {} на 30 дней*".format(i.title, i.price_30)
 
     text += "Метод доставки: Пункт выдачи заказов*"
-    text += "стоимость доставки: 0 тг.*"
+    text += "стоимость доставки: 0 тг.**"
 
-    text += "Итого: {} тг*".format(summ)
+    text += "Итого: {} тг**".format(summ)
 
-    text += "Контактный номер,*"
-    text += "(значение номера при регистрации на платформе)*"
+    text += "Контактный номер, {}**".format(phone)
 
     text += "Благодарим Вас за то, что Вы выбрали нашу платформу ALU.KZ! Мы рады, что*"
     text += "Вы являетесь нашим клиентом.*"
