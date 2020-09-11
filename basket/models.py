@@ -32,3 +32,13 @@ class Rented(models.Model):
     def __str__(self):
         return "id {}, user {}".format(self.id,self.user.phone)
 
+    def chech(self):
+        p = self.product.all()
+        c = "False"
+        for i in p:
+            if i.in_stock == True:
+                c = "True"
+            else:
+                c = "False"
+                break
+        return self.is_checked
