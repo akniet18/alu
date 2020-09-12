@@ -48,12 +48,16 @@ INSTALLED_APPS = [
     'django_filters',
     'django_celery_beat',
     'django_celery_results',
-    'django_cron' ,
+    'django_cron',
+    'django_crontab',
 ]
 
 CRON_CLASSES = [
     "products.cron.MyCronJob",
     # ('10 8 * * *', 'products.cron.send_push')
+]
+CRONJOBS = [
+    ('* * * * *', 'products.cron.MyCronJob')
 ]
 
 MIDDLEWARE = [
