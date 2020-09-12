@@ -13,7 +13,7 @@ from huey import crontab
 from huey.contrib.djhuey import db_periodic_task, db_task
 
 # @periodic_task(run_every=timedelta(seconds=10))
-@db_periodic_task(crontab(minute='*/1'))
+@db_periodic_task(crontab(minute=0, hour=9))
 def send_notifiction():
     print('Here I\’m')
     
