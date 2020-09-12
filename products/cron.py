@@ -10,3 +10,7 @@ class MyCronJob(CronJobBase):
 
     def do(self):
         send_push()
+
+
+def MyCronJob():
+    send_push()

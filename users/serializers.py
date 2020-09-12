@@ -27,5 +27,5 @@ class UserSerializer(serializers.ModelSerializer):
         return self.context['request'].build_absolute_uri(obj.avatar.url)
     class Meta:
         model = User
-        fields = ("avatar","nickname", "phone")
-        read_only_fields = ("avatar", "phone")
+        fields = ("id", "avatar", "nickname", "phone")
+        read_only_fields = ("avatar", "phone", "id")
