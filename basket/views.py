@@ -124,12 +124,6 @@ class AcceptOrRejectRent(APIView):
                     i.get_date = None
                     i.return_date = None
                     i.save()
-            elif action == "return":
-                r.is_ended = True
-                r.save()
-                p = r.product
-                p.is_rented = False
-                p.save()
             elif action == "end":
                 r.is_ended = True
                 r.save()
@@ -137,6 +131,15 @@ class AcceptOrRejectRent(APIView):
                     i.in_stock = True
                     i.is_rented = False
                     i.save()
+                    Message.objects.create(
+                        user = i.owner,
+                        get_or_return = 2,
+                        action = 4,
+                        ownerorclient = 1,
+                        product = i,
+                        order = r,
+                        text = pickUPoint(i.title)
+                    )
             return Response({'status': "ok"})
         else:
             return Response(s.errors)

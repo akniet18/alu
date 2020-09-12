@@ -62,9 +62,13 @@ class MessageApi(APIView):
                     m.order.save()
             if action == 1:
                 m.product.pickup = True
+                m.product.leave = False
+                m.product.get_date = None
                 m.product.save()
             elif action == 2:
                 m.product.leave = True
+                m.product.pickup = False
+                m.product.get_date = None
                 m.product.save()
             m.save()
             return Response({"status": "ok"})            
