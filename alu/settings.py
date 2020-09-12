@@ -46,19 +46,14 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'django_filters',
-    'django_celery_beat',
-    'django_celery_results',
-    'django_cron',
-    'django_crontab',
+    'huey.contrib.djhuey'
+    # 'django_celery_beat',
+    # 'django_celery_results',
+    # 'django_cron',
+    # 'django_crontab',
 ]
 
-CRON_CLASSES = [
-    "products.cron.MyCronJob",
-    # ('10 8 * * *', 'products.cron.send_push')
-]
-CRONJOBS = [
-    ('* * * * *', 'products.cron.MyCronJob')
-]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -113,6 +108,39 @@ DATABASES = {
     }
 }
 
+
+HUEY = {
+    'huey_class': 'huey.RedisHuey',  # Huey implementation to use.
+    'name': DATABASES['default']['NAME'],  # Use db name for huey.
+    'results': True,  # Store return values of tasks.
+    'store_none': False,  # If a task returns None, do not save to results.
+    'immediate': False,  # If DEBUG=True, run synchronously.
+    'utc': True,  # Use UTC for all times internally.
+    'blocking': True,  # Perform blocking pop rather than poll Redis.
+    'connection': {
+        'host': 'localhost',
+        'port': 6379,
+        'db': 0,
+        'connection_pool': None,  # Definitely you should use pooling!
+        # ... tons of other options, see redis-py for details.
+
+        # huey-specific connection parameters.
+        'read_timeout': 1,  # If not polling (blocking pop), use timeout.
+        'url': None,  # Allow Redis config via a DSN.
+    },
+    'consumer': {
+        'workers': 1,
+        'worker_type': 'thread',
+        'initial_delay': 0.1,  # Smallest polling interval, same as -d.
+        'backoff': 1.15,  # Exponential backoff using this rate, -b.
+        'max_delay': 10.0,  # Max possible polling interval, -m.
+        'scheduler_interval': 1,  # Check schedule every second, -s.
+        'periodic': True,  # Enable crontab feature.
+        'check_worker_health': True,  # Enable worker health checks.
+        'health_check_interval': 1,  # Check worker health every second.
+    },
+}
+
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.sqlite3',
@@ -153,10 +181,10 @@ USE_L10N = True
 
 USE_TZ = True
 
-CELERY_BROKER_URL = 'redis://localhost:6379/0'
+# CELERY_BROKER_URL = 'redis://localhost:6379/0'
 # If time zones are active (USE_TZ = True) define your local 
-CELERY_RESULT_BACKEND = 'django-db'
-CELERY_TIMEZONE = 'Asia/Almaty'
+# CELERY_RESULT_BACKEND = 'django-db'
+# CELERY_TIMEZONE = 'Asia/Almaty'
 # app.conf.enable_utc = False # so celery doesn't take utc by default
 # We're going to have our tasks rolling soon, so that will be handy 
 # from celery.task.schedules import crontab

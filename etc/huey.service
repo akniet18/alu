@@ -1,0 +1,12 @@
+[Unit]
+Description=gunicorn daemon
+After=network.target
+
+[Service]
+User=root
+Group=www-data
+WorkingDirectory=/var/www/aluonline/alu
+ExecStart=/var/www/aluonline/venv/bin/python manage.py run_huey
+
+[Install]
+WantedBy=multi-user.target

@@ -1,18 +1,22 @@
-from celery import shared_task, task
-from celery.task.schedules import crontab
-from celery.task import periodic_task
+# from celery import shared_task, task
+# from celery.task.schedules import crontab
+# from celery.task import periodic_task
 from products.views import send_push
 from datetime import datetime, timedelta
-from django.apps import apps
-from celery import app
+# from django.apps import apps
+# from celery import app
+from products.models import Product
+from message.models import Message
+from utils.messages import deliverThree, PickupThree
+from huey import crontab
+
+from huey.contrib.djhuey import db_periodic_task, db_task
 
 # @periodic_task(run_every=timedelta(seconds=10))
-@shared_task
+@db_periodic_task(crontab(minute='*/1'))
 def send_notifiction():
     print('Here I\’m')
-    from products.models import Product
-    from message.models import Message
-    from utils.messages import deliverThree, PickupThree
+    
     # send_push()
     p = Product.objects.filter(is_rented=True, count_day__isnull=False, rented_obj__is_rented=True)
     for i in p:
@@ -31,7 +35,8 @@ def send_notifiction():
                         action = 2,
                         order = r,
                         product = i,
-                        get_or_return = 2
+                        get_or_return = 2,
+                        ownerorclient = 2
                     )
                 else:
                     mid = Message.objects.create(
@@ -40,7 +45,8 @@ def send_notifiction():
                         action = 1,
                         order = r,
                         product = i,
-                        get_or_return = 2
+                        get_or_return = 2,
+                        ownerorclient = 2
                     )
     return "ok"
     
