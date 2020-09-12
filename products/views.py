@@ -191,10 +191,20 @@ class ReturnApi(APIView):
             p.is_rented = False
             p.count_day = None
             p.get_date = None
+            p.in_stock = True
             p.save()
             r = p.rented_obj.all()[0]
             r.is_ended = True
             r.save()
+            Message.objects.create(
+                user = p.owner,
+                get_or_return = 2,
+                action = 4,
+                ownerorclient = 1,
+                product = p,
+                order = r,
+                text = pickUPoint(p.title)
+            )
             return Response({'status': 'ok'})
         else:
             return Response(s.errors)
@@ -227,7 +237,7 @@ class productInStock(APIView):
         s = getProductSerializer(queryset, many=True, context={'request': request})
         return Response(s.data)
 
-        
+
 def send_push():
     p = Product.objects.filter(is_rented=True, count_day__isnull=False, rented_obj__is_rented=True)
     a = []

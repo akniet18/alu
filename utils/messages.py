@@ -38,10 +38,10 @@ def deliverOne(number, products, address, phone):
     for i in products:
         if i.count_day == 14:
             summ += i.price_14
-            text += "Книга '{}' - {} на 14 дней*".format(i.title, i.price_14)
+            text += "'{}' - {} на 14 дней*".format(i.title, i.price_14)
         else:
             summ += i.price_30
-            text += "Книга '{}' - {} на 30 дней*".format(i.title, i.price_30)
+            text += "'{}' - {} на 30 дней*".format(i.title, i.price_30)
 
     text += "**Метод доставки: Курьерская доставка*"
     text += "стоимость доставки: 800 тг.*"
@@ -85,10 +85,10 @@ def PickupOne(number, products, phone):
     for i in products:
         if i.count_day == 14:
             summ += i.price_14
-            text += "Книга '{}' - {} на 14 дней*".format(i.title, i.price_14)
+            text += "'{}' - {} на 14 дней*".format(i.title, i.price_14)
         else:
             summ += i.price_30
-            text += "Книга '{}' - {} на 30 дней*".format(i.title, i.price_30)
+            text += "'{}' - {} на 30 дней*".format(i.title, i.price_30)
 
     text += "**Метод доставки: Пункт выдачи заказов*"
     text += "стоимость доставки: 0 тг.**"
