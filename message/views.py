@@ -44,13 +44,15 @@ class MessageApi(APIView):
             m.is_readed = True
             
             date = s.validated_data.get('date', None)
-            leave = s.validated_data.get('leave', None)
+            action = s.validated_data.get('action', None)
             if date is not None:
                 if m.ownerorclient == 1:
                     if m.get_or_return == 1:
                         m.product.get_date = date
                     else:
                         m.product.return_date = date
+                        m.product.pickup = False
+                        m.product.leave = False
                     m.product.save()
                 else:
                     if m.get_or_return == 1:
@@ -58,7 +60,12 @@ class MessageApi(APIView):
                     else:
                         m.order.return_date = date
                     m.order.save()
-            # if leave:
+            if action == 1:
+                m.product.pickup = True
+                m.product.save()
+            elif action == 2:
+                m.product.leave = True
+                m.product.save()
             m.save()
             return Response({"status": "ok"})            
         else:

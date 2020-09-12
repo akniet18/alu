@@ -117,13 +117,26 @@ class AcceptOrRejectRent(APIView):
                 r.rented_day = datetime.now()
                 # r.deadline = datetime.now() + timedelta(r.count_day)
                 r.save()
-                # send_notifiction()
+                for i in r.product.all():
+                    i.in_stock = False
+                    i.leave = False
+                    i.pickup = False
+                    i.get_date = None
+                    i.return_date = None
+                    i.save()
             elif action == "return":
                 r.is_ended = True
                 r.save()
                 p = r.product
                 p.is_rented = False
                 p.save()
+            elif action == "end":
+                r.is_ended = True
+                r.save()
+                for i in r.product.all():
+                    i.in_stock = True
+                    i.is_rented = False
+                    i.save()
             return Response({'status': "ok"})
         else:
             return Response(s.errors)
@@ -151,7 +164,7 @@ class adminNewRentedApi(APIView):
                     user = i.owner,
                     text = deliverthenpickup(i.title),
                     ownerorclient = 1,
-                    action = 2,
+                    action = 3,
                     product = i,
                     get_or_return = 1,
                     order = r
@@ -171,20 +184,6 @@ class adminNewRentedApi(APIView):
                     order = r
                 )
             return Response({"status": "ok"})
-        else:
-            return Response(s.errors)
-
-
-class ReturnCheck(APIView):
-    permission_classes = (permissions.IsAuthenticated,)
-
-    def post(self, request):
-        s = OrderidSer(data = request.data)
-        if s.is_valid():
-            o = Rented.objects.get(id = s.validated_data['order_id'])
-            o.is_ended = True
-            o.save()
-        
         else:
             return Response(s.errors)
 
@@ -246,39 +245,39 @@ class inStock(APIView):
             r = Product.objects.get(id=s.validated_data['product'])
             r.in_stock = True
             r.save()
-            order = r.rented_obj.all()[1]
-            c = False
-            for j in order.product.all():
-                if j.in_stock == True:
-                    c = True
-                else:
-                    c = False
-                    break
-            if c:
-                if order.get_product == 1:
-                    Message.objects.create(
-                        user = order.user,
-                        text = deliverTwo(order.id),
-                        order = order,
-                        get_or_return = 1,
-                        action = 2,
-                        ownerorclient = 2
-                    )
-                else:
-                    Message.objects.create(
-                        user = order.user,
-                        text = PickupTwo(order.id),
-                        order = order,
-                        get_or_return = 1,
-                        action = 1,
-                        ownerorclient = 2
-                    )   
+            # order = r.rented_obj.all()[1]
+            # c = False
+            # for j in order.product.all():
+            #     if j.in_stock == True:
+            #         c = True
+            #     else:
+            #         c = False
+            #         break
+            # if c:
+            #     if order.get_product == 1:
+            #         Message.objects.create(
+            #             user = order.user,
+            #             text = deliverTwo(order.id),
+            #             order = order,
+            #             get_or_return = 1,
+            #             action = 2,
+            #             ownerorclient = 2
+            #         )
+            #     else:
+            #         Message.objects.create(
+            #             user = order.user,
+            #             text = PickupTwo(order.id),
+            #             order = order,
+            #             get_or_return = 1,
+            #             action = 1,
+            #             ownerorclient = 2
+            #         )   
             return Response({'status': "ok"})
         else:
             return Response(s.errors)
 
 
-# 
+
 class ToDeliverDate(APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
@@ -292,14 +291,17 @@ class ToDeliverDate(APIView):
                     text = deliverTwo(o.id),
                     order = o,
                     get_or_return = 1,
-                    action = 2
+                    action = 2,
+                    ownerorclient = 2
                 )
             else:
                 Message.objects.create(
                     user = o.user,
                     text = PickupTwo(o.id),
                     order = o,
-                    action = 1
+                    action = 1,
+                    get_or_return = 1,
+                    ownerorclient = 2
                 )                
             return Response({"status": "ok"})
         else:

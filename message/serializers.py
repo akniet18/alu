@@ -11,4 +11,4 @@ class MessageSer(serializers.ModelSerializer):
 class PostMessageSer(serializers.Serializer):
     id = serializers.IntegerField()
     date = serializers.DateTimeField(required=False)
-    leave = serializers.BooleanField(required=False)
+    action = serializers.IntegerField(required=False)

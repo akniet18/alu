@@ -24,7 +24,7 @@ class getProduct(viewsets.ModelViewSet):
     queryset = Product.objects.filter(is_publish=True)
     serializer_class = getProductSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    search_fields = ('title',)
+    search_fields = ('title', 'about')
     filter_fields = ('category','subcategory', 'subcategory2', "price_14", "price_30")
     
 
@@ -47,9 +47,6 @@ class recomendations(APIView):
         queryset = Product.objects.filter(is_publish=True).order_by("-publish_date")
         serializer_class = getProductSerializer(queryset, many=True, context={'request': request})
         return Response(serializer_class.data)
-
-   
-
 
 # product create
 class product(APIView):
@@ -109,6 +106,28 @@ class favorites(APIView):
                 request.user.favorites.remove(product)
             else:
                 request.user.favorites.add(product)
+            return Response({'status': 'ok'})
+        else:
+            return Response(s.errors)
+
+
+class ProductChange(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def post(self, request):
+        s = ProductChangeSer(data = request.data)
+        if s.is_valid():
+            p = Product.objects.get(id=s.validated_data['id'])
+            price_14 = s.validated_data.get("price_14", None)
+            price_30 = s.validated_data.get("price_30", None)
+            about = s.validated_data.get("about", None)
+            if price_14:
+                p.price_14 = price_14
+            if price_30:
+                p.price_30 = price_30
+            if about:
+                p.about = about
+            p.save()
             return Response({'status': 'ok'})
         else:
             return Response(s.errors)
@@ -181,6 +200,34 @@ class ReturnApi(APIView):
             return Response(s.errors)
 
 
+class ReturnProduct(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request):
+        queryset = Product.objects.filter(in_stock=True, is_rented=False)
+        s = getProductSerializer(queryset, many=True, context={'request': request})
+        return Response(s.data)
+
+    def post(self, request):
+        s = productIdSer(data = request.data)
+        if s.is_valid():
+            p = Product.objects.get(id=s.validated_data['product'])
+            p.in_stock = False
+            p.save()
+            return Response({'status': 'ok'})
+        else:
+            return Response(s.errors)
+
+
+class productInStock(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request):
+        queryset = Product.objects.filter(in_stock=True, is_rented=False, leave=True)
+        s = getProductSerializer(queryset, many=True, context={'request': request})
+        return Response(s.data)
+
+        
 def send_push():
     p = Product.objects.filter(is_rented=True, count_day__isnull=False, rented_obj__is_rented=True)
     a = []

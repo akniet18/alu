@@ -43,3 +43,10 @@ class ProductPublishSerializer(serializers.ModelSerializer):
         model = Product
         fields = ('category', 'subcategory', 'subcategory2')
 
+
+class ProductChangeSer(serializers.Serializer):
+    id = serializers.IntegerField(required=False)
+    about = serializers.CharField(required=False)
+    price_14 = serializers.IntegerField(required=False)
+    price_30 = serializers.IntegerField(required=False)
+
