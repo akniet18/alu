@@ -14,6 +14,7 @@ urlpatterns = [
 
     path("admin/get", GetProductPublish.as_view()),
     path('return', ReturnApi.as_view()),
+    path('return/pickup', RetrunPickup.as_view()),
 
     path('returned', ReturnProduct.as_view()),
     path("inStock", productInStock.as_view())

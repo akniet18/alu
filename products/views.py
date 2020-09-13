@@ -170,7 +170,7 @@ class ReturnApi(APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request):
-        p = Product.objects.filter(is_rented=True, count_day__isnull=False, rented_obj__is_rented=True)
+        p = Product.objects.filter(is_rented=True, count_day__isnull=False, rented_obj__is_rented=True, rented_obj__return_product=1)
         a = []
         for i in p:
             rented = datetime.strptime(str(i.rented_obj.all()[0].rented_day), '%Y-%m-%d')
@@ -180,6 +180,8 @@ class ReturnApi(APIView):
                 # print(abs(days_left.days))
                 if abs(days_left.days) == 1:
                     a.append(i)
+            else:
+                a.append(i)
             
         s = getProductSerializer(a, many=True, context={'request': request})
         return Response(s.data)
@@ -208,6 +210,27 @@ class ReturnApi(APIView):
             return Response({'status': 'ok'})
         else:
             return Response(s.errors)
+
+
+class RetrunPickup(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request):
+        p = Product.objects.filter(is_rented=True, count_day__isnull=False, rented_obj__is_rented=True, rented_obj__return_product=2)
+        a = []
+        for i in p:
+            rented = datetime.strptime(str(i.rented_obj.all()[0].rented_day), '%Y-%m-%d')
+            deadline = rented + timedelta(i.count_day)
+            if datetime.now() < deadline:
+                days_left = datetime.now()-deadline
+                # print(abs(days_left.days))
+                if abs(days_left.days) == 1:
+                    a.append(i)
+            else:
+                a.append(i)
+            
+        s = getProductSerializer(a, many=True, context={'request': request})
+        return Response(s.data)
 
 
 class ReturnProduct(APIView):
