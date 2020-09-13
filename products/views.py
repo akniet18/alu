@@ -237,7 +237,7 @@ class ReturnProduct(APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request):
-        queryset = Product.objects.filter(in_stock=True, is_rented=False)
+        queryset = Product.objects.filter(in_stock=True, is_rented=False, leave=False)
         s = getProductSerializer(queryset, many=True, context={'request': request})
         return Response(s.data)
 
