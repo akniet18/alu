@@ -70,14 +70,39 @@ class rentedApi(APIView):
                 return_product = return_product,
                 return_address = return_address,
                 get_address = get_address,
-                amount = amount
+                amount = amount,
+                is_checked = True
             )
             for i in p:
                 p = Product.objects.get(id=i['id'])
                 p.count_day = i['count_day']
+                p.is_rented = True
                 p.save()
                 r.product.add(p)
                 r.save()
+                Message.objects.create(
+                    user = p.owner,
+                    text = deliverthenpickup(p.title),
+                    ownerorclient = 1,
+                    action = 3,
+                    product = p,
+                    get_or_return = 1,
+                    order = r
+                )
+            if r.get_product == 1:
+                Message.objects.create(
+                    user = r.user,
+                    text = deliverOne(r.id, r.product.all(), r.get_address, r.user.phone),
+                    action = 1,
+                    order = r
+                )
+            else:
+                Message.objects.create(
+                    user = r.user,
+                    text = PickupOne(r.id, r.product.all(), r.user.phone),
+                    action = 1,
+                    order = r
+                )
             request.user.basket.clear()
             return Response({'status': 'ok'})
         else:
