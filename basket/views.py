@@ -340,7 +340,8 @@ class deliver(APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request):
-        r = Rented.objects.filter(product__in_stock=True, is_rented=False)
+        r = Rented.objects.filter(is_rented=False)
+        print(r)
         a = []
         for i in r:
             c = False
