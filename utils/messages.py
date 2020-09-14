@@ -12,7 +12,8 @@ def deliverthenpickup(name):
     text = "Здравствуйте!*" 
     text += "Ваш товар '{}' оформлен в заказе на аренду!*".format(name)
     text += "Вам необходимо выбрать удобную дату и время курьерской доставки для "
-    text += "того чтобы забрать у вас товар. Курьерская служба - 400тг* или*"
+    text += "того чтобы забрать у вас товар. Курьерская служба - 400тг* или *"
+    text += "Самовывоз в пункт выдачи *"
     text += "Ждём Ваш выбор!*"
     return text
 
@@ -21,12 +22,13 @@ def pickUPoint(name):
     text += "Ваш товар '{}' находится в пункте выдачи заказов.*".format(name)
     text += "Вам необходимо выбрать удобную дату и время курьерской доставки для*"
     text += "возврата товара. Курьерская служба - 400тг* или *"
+    text += "Самовывоз в пункт выдачи*"
     text += "*Если вы изъявите желание оставить ваш товар в нашем пункте выдачи*"
     text += "заказов, просим Вас нажать на нижнюю кнопку.*"
     text += "Ждём Ваш выбор!*"
     return text
 
-def deliverOne(number, products, address, phone, getp, retp):
+def deliverOne(number, products, address, phone, getp, retp, summ):
     text = "Здравствуйте!*"
     text += "Вами оформлен заказ №{}*".format(number)
     text += "Планируемый срок формирования заказа — от 1 до 3 дней*"
@@ -34,13 +36,10 @@ def deliverOne(number, products, address, phone, getp, retp):
     text += "получите в разделе 'Сообщения'.**"
 
     text += "Заказанные товары:*"
-    summ = 0
     for i in products:
         if i.count_day == 14:
-            summ += i.price_14
             text += "'{}' - {} на 14 дней*".format(i.title, i.price_14)
         else:
-            summ += i.price_30
             text += "'{}' - {} на 30 дней*".format(i.title, i.price_30)
 
     text += "**Метод доставки: Курьерская доставка*"

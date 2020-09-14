@@ -64,6 +64,7 @@ class rentedApi(APIView):
             amount = s.validated_data['amount']
             get_address = s.validated_data.get("get_address", None)
             return_address = s.validated_data.get("return_address", None)
+
             r = Rented.objects.create(
                 user = request.user,
                 get_product = get_product,
@@ -92,7 +93,7 @@ class rentedApi(APIView):
             if r.get_product == 1:
                 Message.objects.create(
                     user = r.user,
-                    text = deliverOne(r.id, r.product.all(), r.get_address, r.user.phone, r.get_product, r.return_product),
+                    text = deliverOne(r.id, r.product.all(), r.get_address, r.user.phone, r.get_product, r.return_product, r.amount),
                     action = 1,
                     order = r
                 )
