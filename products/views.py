@@ -223,6 +223,12 @@ class ReturnApi(APIView):
                 order = r,
                 text = pickUPoint(p.title)
             )
+            Message.objects.create(
+                user = p.owner,
+                action = 1,
+                product = p,
+                text = product_publish(p.title)
+            )
             return Response({'status': 'ok'})
         else:
             return Response(s.errors)

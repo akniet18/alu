@@ -92,7 +92,7 @@ class rentedApi(APIView):
             if r.get_product == 1:
                 Message.objects.create(
                     user = r.user,
-                    text = deliverOne(r.id, r.product.all(), r.get_address, r.user.phone),
+                    text = deliverOne(r.id, r.product.all(), r.get_address, r.user.phone, r.get_product, r.return_product),
                     action = 1,
                     order = r
                 )

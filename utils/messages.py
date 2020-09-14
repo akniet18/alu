@@ -26,7 +26,7 @@ def pickUPoint(name):
     text += "Ждём Ваш выбор!*"
     return text
 
-def deliverOne(number, products, address, phone):
+def deliverOne(number, products, address, phone, getp, retp):
     text = "Здравствуйте!*"
     text += "Вами оформлен заказ №{}*".format(number)
     text += "Планируемый срок формирования заказа — от 1 до 3 дней*"
@@ -44,7 +44,12 @@ def deliverOne(number, products, address, phone):
             text += "'{}' - {} на 30 дней*".format(i.title, i.price_30)
 
     text += "**Метод доставки: Курьерская доставка*"
-    text += "стоимость доставки: 800 тг.*"
+    if getp == 1 and retp == 2:
+        text += "стоимость доставки: 400 тг.*"
+    elif getp == 2 and retp == 1:
+        text += "стоимость доставки: 400 тг.*"
+    elif getp == 1 and retp == 1:
+        text += "стоимость доставки: 800 тг.*"
     text += "Адрес доставки: {}**".format(address)
 
     text += "Итого: {} тг**".format(summ)
