@@ -90,6 +90,18 @@ class product(APIView):
             return Response(s.errors)
 
 
+class Delete(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def post(self, request):
+        s = productIdSer(data = request.data)
+        if s.is_valid():
+            p = Product.objects.get(id=s.validated_data['product']).delete()
+            return Response({'status': 'ok'})
+        else:
+            return Response(s.errors)
+
+
 class favorites(APIView):
     permission_classes = (permissions.IsAuthenticated,)
 

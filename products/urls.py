@@ -10,6 +10,7 @@ urlpatterns = [
 
     path('publish/<id>', ProductPublish.as_view()),
     path("change", ProductChange.as_view()),
+    path('delete', Delete.as_view()),
     # path('publish', ProductPublish.as_view()),
 
     path("admin/get", GetProductPublish.as_view()),
