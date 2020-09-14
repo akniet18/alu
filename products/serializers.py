@@ -38,6 +38,17 @@ class getProductSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class getProductSerializer2(serializers.ModelSerializer):
+    location = LocationSerializer()
+    product_image = ProductImageSer(many=True)
+    subcategory = categorySer()
+    owner = UserSerializer()
+    days_left = serializers.IntegerField()
+    class Meta:
+        model = Product
+        fields = '__all__'
+
+
 class ProductPublishSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product

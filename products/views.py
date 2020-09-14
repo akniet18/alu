@@ -178,12 +178,16 @@ class ReturnApi(APIView):
             if datetime.now() < deadline:
                 days_left = datetime.now()-deadline
                 # print(abs(days_left.days))
+                dd = abs(days_left.days) 
                 if abs(days_left.days) == 1:
+                    i.days_left = dd
                     a.append(i)
             else:
+                dd = abs(days_left.days) 
+                i.days_left = dd
                 a.append(i)
             
-        s = getProductSerializer(a, many=True, context={'request': request})
+        s = getProductSerializer2(a, many=True, context={'request': request})
         return Response(s.data)
 
     def post(self, request):
@@ -224,12 +228,17 @@ class RetrunPickup(APIView):
             if datetime.now() < deadline:
                 days_left = datetime.now()-deadline
                 # print(abs(days_left.days))
-                if abs(days_left.days) == 1:
+                dd = abs(days_left.days)
+                if dd == 1:
+                    i.days_left = dd
                     a.append(i)
             else:
+                days_left = datetime.now()-deadline
+                dd = abs(days_left.days) 
+                i.days_left = dd
                 a.append(i)
             
-        s = getProductSerializer(a, many=True, context={'request': request})
+        s = getProductSerializer2(a, many=True, context={'request': request})
         return Response(s.data)
 
 
