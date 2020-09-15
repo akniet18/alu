@@ -73,14 +73,15 @@ class rentedApi(APIView):
                 p.is_rented = True
                 p.save()
                 products.append(p)
-                Message.objects.create(
-                    user = p.owner,
-                    text = deliverthenpickup(p.title),
-                    ownerorclient = 1,
-                    action = 3,
-                    product = p,
-                    get_or_return = 1
-                )
+                if p.in_stock == False:
+                    Message.objects.create(
+                        user = p.owner,
+                        text = deliverthenpickup(p.title),
+                        ownerorclient = 1,
+                        action = 3,
+                        product = p,
+                        get_or_return = 1
+                    )
             r = Rented.objects.create(
                 user = request.user,
                 get_product = get_product,
@@ -132,7 +133,6 @@ class MyRentedProduct(APIView):
         return Response(s.data)
 
 
-# from .tasks import send_notifiction
 class AcceptOrRejectRent(APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
