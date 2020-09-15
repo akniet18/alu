@@ -73,6 +73,8 @@ class product(APIView):
                 about = about,
                 price_14 = price_14,
                 price_30 = price_30,
+                price_14_owner = price_14,
+                price_30_owner = price_30,
                 phones = phones,
                 owner = request.user,
                 location = location,
