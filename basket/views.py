@@ -58,13 +58,29 @@ class rentedApi(APIView):
         s = CreaterentedSerializer(data=request.data)
         if s.is_valid():
             print(s.validated_data)
-            p = s.validated_data['products']
+            pr = s.validated_data['products']
             get_product = s.validated_data['get_product']
             return_product = s.validated_data['return_product']
             amount = s.validated_data['amount']
             get_address = s.validated_data.get("get_address", None)
-            return_address = s.validated_data.get("return_address", None)
-
+            return_address = s.validated_data.get("return_address", None)           
+            products = []
+            for i in pr:
+                p = Product.objects.get(id=i['id'])
+                if p.is_rented:
+                    return Response({"status": "already to rent"})
+                p.count_day = i['count_day']
+                p.is_rented = True
+                p.save()
+                products.append(p)
+                Message.objects.create(
+                    user = p.owner,
+                    text = deliverthenpickup(p.title),
+                    ownerorclient = 1,
+                    action = 3,
+                    product = p,
+                    get_or_return = 1
+                )
             r = Rented.objects.create(
                 user = request.user,
                 get_product = get_product,
@@ -74,22 +90,9 @@ class rentedApi(APIView):
                 amount = amount,
                 is_checked = True
             )
-            for i in p:
-                p = Product.objects.get(id=i['id'])
-                p.count_day = i['count_day']
-                p.is_rented = True
-                p.save()
-                r.product.add(p)
-                r.save()
-                Message.objects.create(
-                    user = p.owner,
-                    text = deliverthenpickup(p.title),
-                    ownerorclient = 1,
-                    action = 3,
-                    product = p,
-                    get_or_return = 1,
-                    order = r
-                )
+            for i in products:
+                r.product.add(i)
+            r.save()
             if r.get_product == 1:
                 Message.objects.create(
                     user = r.user,
@@ -100,7 +103,7 @@ class rentedApi(APIView):
             else:
                 Message.objects.create(
                     user = r.user,
-                    text = PickupOne(r.id, r.product.all(), r.user.phone),
+                    text = PickupOne(r.id, r.product.all(), r.user.phone, r.amount),
                     action = 1,
                     order = r
                 )

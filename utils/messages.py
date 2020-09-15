@@ -69,15 +69,14 @@ def deliverTwo(number):
     return text
 
 def deliverThree(name):
-    text = "Здравствуйте!"
-    text += "До окончания вашей аренды на товар {} остался".format(name)
-    text += "1 день.*"
+    text = "Здравствуйте!*"
+    text += "До окончания вашей аренды на товар {} остался 1 день.*".format(name)
     text += "Вам необходимо выбрать удобную дату и время курьерской доставки.*"
     text += "Ждём Ваш выбор!"
     return text
 
 
-def PickupOne(number, products, phone):
+def PickupOne(number, products, phone, summ):
     text = "Здравствуйте!*"
     text += "Вами оформлен заказ №{}*".format(number)
     text += "Планируемый срок формирования заказа — от 1 до 3 дней*"
@@ -85,13 +84,10 @@ def PickupOne(number, products, phone):
     text += "получите в разделе 'Сообщения'.**"
 
     text += "Заказанные товары:*"
-    summ = 0
     for i in products:
         if i.count_day == 14:
-            summ += i.price_14
             text += "'{}' - {} на 14 дней*".format(i.title, i.price_14)
         else:
-            summ += i.price_30
             text += "'{}' - {} на 30 дней*".format(i.title, i.price_30)
 
     text += "**Метод доставки: Пункт выдачи заказов*"
