@@ -48,3 +48,7 @@ class ProductImage(models.Model):
 
     def __str__(self):
         return self.product.title
+
+
+class Recomendation(models.Model):
+    products = models.ManyToManyField("products.Product", related_name="recomendation")

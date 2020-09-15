@@ -7,4 +7,5 @@ class dateOrder(admin.ModelAdmin):
 
 admin.site.register(Product, dateOrder)
 admin.site.register(ProductImage)
+admin.site.register(Recomendation)
 

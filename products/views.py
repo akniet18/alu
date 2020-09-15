@@ -44,9 +44,25 @@ class recomendations(APIView):
     permission_classes = [permissions.AllowAny,]
 
     def get(self, request):
-        queryset = Product.objects.filter(is_publish=True).order_by("-publish_date")
+        r = Recomendation.objects.get(id=1).products.all()
+        queryset = Product.objects.filter(is_publish=True).order_by("-publish_date")[:100]
+        queryset = queryset.union(r)
+        
         serializer_class = getProductSerializer(queryset, many=True, context={'request': request})
         return Response(serializer_class.data)
+
+    def post(self, request):
+        s = productIdSer(data=request.data)
+        if s.is_valid():
+            p = Product.objects.get(id=s.validated_data['product'])
+            r, created = Recomendation.objects.get_or_create(id=1)
+            if product in r.products.all():
+                r.products.remove(product)
+            else:
+                r.products.add(product)
+            return Response({'status': 'ok'})
+        else:
+            return Response(s.errors)
 
 # product create
 class product(APIView):
