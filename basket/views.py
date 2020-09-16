@@ -66,6 +66,8 @@ class rentedApi(APIView):
             return_address = s.validated_data.get("return_address", None)           
             products = []
             for i in pr:
+                if type(i) == str:
+                    i = eval(i)
                 p = Product.objects.get(id=i['id'])
                 if p.is_rented:
                     return Response({"status": "already to rent"})
