@@ -6,6 +6,6 @@ def send_push(user, text, action=None):
     a = APNSDevice.objects.filter(user = user)
     b = GCMDevice.objects.filter(user = user)
     if a.exists():
-        a[0].send_message(None, extra={"text": text, "action": action})
+        a[0].send_message(text)
     elif b.exists():
-        b[0].send_message(None, extra={"text": text, "action": action})
+        b[0].send_message(text)

@@ -18,6 +18,7 @@ from datetime import datetime
 from products.models import *
 from utils.compress import *
 from push_notifications.models import APNSDevice, GCMDevice
+from utils.push import send_push
 # from django_auto_prefetching import AutoPrefetchViewSetMixin
 
 
@@ -224,12 +225,12 @@ class pushRegister(APIView):
         else:
             return Response(s.errors)
 
-from utils.push import send_push
+
 class SendPush(APIView):
     permission_classes = (permissions.AllowAny,)
 
     def get(self, request):
         user = User.objects.get(id=1)
         print(user)
-        send_push(user, "text")
+        send_push(user, "Здравствуйте! Вами оформлен заказ №12345 Планируемый срок формирования заказа — от 1 до 3 дней Уведомления обо всех изменениях заказа и даты комплектации товаров Вы получите в разделе 'Сообщения'. Заказанные товары: Книга 'Растворится в воздухе' - 1 300 тг на 30 дней Книга 'осле меня' - 2 300 тг на 60 дней Метод доставки: Курьерская доставка стоимость доставки: 800 тг. Адрес доставки: ул. Тимирязева 26 (значение из заполненного поля доставка) Итого: 6500 тг Контактный номер, (значение номера при регистрации на платформе) Благодарим Вас за то, что Вы выбрали нашу платформу ALU.KZ! Мы рады, что Вы являетесь нашим клиентом. Если у Вас возникнут вопросы, пожалуйста, обращайтесь к нам.")
         return Response({'starus': "ok"})

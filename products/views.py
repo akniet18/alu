@@ -18,6 +18,7 @@ from locations.models import *
 from basket.serializers import *
 from message.models import Message
 from datetime import datetime, timedelta
+from utils.push import send_push
 
 class getProduct(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny,]
@@ -176,11 +177,12 @@ class ProductPublish(APIView):
             product.is_publish = True
             product.publish_date = datetime.now()
             product.save()
-            Message.objects.create(
+            m = Message.objects.create(
                 user = product.owner,
                 action = 1,
                 text = product_publish(product.title)
             )
+            send_push(product.owner, m.text)
             return Response({"status": "ok"})
         else:
             return Response(s.errors)
@@ -240,7 +242,7 @@ class ReturnApi(APIView):
             r = p.rented_obj.all()[0]
             r.is_ended = True
             r.save()
-            Message.objects.create(
+            m1 = Message.objects.create(
                 user = p.owner,
                 get_or_return = 2,
                 action = 4,
@@ -249,12 +251,14 @@ class ReturnApi(APIView):
                 order = r,
                 text = pickUPoint(p.title)
             )
-            Message.objects.create(
+            m2 = Message.objects.create(
                 user = p.owner,
                 action = 1,
                 product = p,
                 text = product_publish(p.title)
             )
+            send_push(p.owner, m1.text)
+            send_push(p.owner, m2.text)
             return Response({'status': 'ok'})
         else:
             return Response(s.errors)

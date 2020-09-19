@@ -12,6 +12,7 @@ from products.models import *
 from products.serializers import *
 from message.models import Message
 from utils.messages import *
+from utils.push import send_push
 
 
 class BasketView(APIView):
@@ -32,8 +33,7 @@ class BasketView(APIView):
                 request.user.basket.add(product)
             return Response({'status': 'ok'})
         else:
-            return Response(s.errors)
-            
+            return Response(s.errors)           
 
 
 class rentedApi(APIView):
@@ -76,7 +76,7 @@ class rentedApi(APIView):
                 p.save()
                 products.append(p)
                 if p.in_stock == False:
-                    Message.objects.create(
+                    m = Message.objects.create(
                         user = p.owner,
                         text = deliverthenpickup(p.title),
                         ownerorclient = 1,
@@ -84,6 +84,7 @@ class rentedApi(APIView):
                         product = p,
                         get_or_return = 1
                     )
+                    send_push(p.owner, m.text)
             r = Rented.objects.create(
                 user = request.user,
                 get_product = get_product,
@@ -97,19 +98,21 @@ class rentedApi(APIView):
                 r.product.add(i)
             r.save()
             if r.get_product == 1:
-                Message.objects.create(
+                m = Message.objects.create(
                     user = r.user,
                     text = deliverOne(r.id, r.product.all(), r.get_address, r.user.phone, r.get_product, r.return_product, r.amount),
                     action = 1,
                     order = r
                 )
+                send_push(r.user, m.text)
             else:
-                Message.objects.create(
+                m = Message.objects.create(
                     user = r.user,
                     text = PickupOne(r.id, r.product.all(), r.user.phone, r.amount),
                     action = 1,
                     order = r
                 )
+                send_push(r.user, m.text)
             request.user.basket.clear()
             return Response({'status': 'ok'})
         else:
@@ -162,7 +165,7 @@ class AcceptOrRejectRent(APIView):
                     i.in_stock = True
                     i.is_rented = False
                     i.save()
-                    Message.objects.create(
+                    m =Message.objects.create(
                         user = i.owner,
                         get_or_return = 2,
                         action = 4,
@@ -171,6 +174,7 @@ class AcceptOrRejectRent(APIView):
                         order = r,
                         text = pickUPoint(i.title)
                     )
+                    send_push(i.owner, m.text)
             return Response({'status': "ok"})
         else:
             return Response(s.errors)
@@ -194,7 +198,7 @@ class adminNewRentedApi(APIView):
                 p = i
                 p.is_rented = True
                 p.save()
-                Message.objects.create(
+                m = Message.objects.create(
                     user = i.owner,
                     text = deliverthenpickup(i.title),
                     ownerorclient = 1,
@@ -203,20 +207,23 @@ class adminNewRentedApi(APIView):
                     get_or_return = 1,
                     order = r
                 )
+                send_push(i.owner, m.text)
             if r.get_product == 1:
-                Message.objects.create(
+                m = Message.objects.create(
                     user = r.user,
                     text = deliverOne(r.id, r.product.all(), r.get_address, r.user.phone),
                     action = 1,
                     order = r
                 )
+                send_push(r.user, m.text)
             else:
-                Message.objects.create(
+                m = Message.objects.create(
                     user = r.user,
                     text = PickupOne(r.id, r.product.all(), r.user.phone),
                     action = 1,
                     order = r
                 )
+                send_push(r.user, m.text)
             return Response({"status": "ok"})
         else:
             return Response(s.errors)
@@ -320,7 +327,7 @@ class ToDeliverDate(APIView):
         if s.is_valid():
             o = Rented.objects.get(id = s.validated_data['order_id'])
             if o.get_product == 1:
-                Message.objects.create(
+                m = Message.objects.create(
                     user = o.user,
                     text = deliverTwo(o.id),
                     order = o,
@@ -328,15 +335,17 @@ class ToDeliverDate(APIView):
                     action = 2,
                     ownerorclient = 2
                 )
+                send_push(o.user, m.text)
             else:
-                Message.objects.create(
+                m = Message.objects.create(
                     user = o.user,
                     text = PickupTwo(o.id),
                     order = o,
                     action = 1,
                     get_or_return = 1,
                     ownerorclient = 2
-                )                
+                )   
+                send_push(o.user, m.text)             
             return Response({"status": "ok"})
         else:
             return Response(s.errors)
