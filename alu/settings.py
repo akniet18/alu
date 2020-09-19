@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'django_filters',
-    'huey.contrib.djhuey'
+    'huey.contrib.djhuey',
+    "push_notifications"
     # 'django_celery_beat',
     # 'django_celery_results',
     # 'django_cron',
@@ -106,6 +107,17 @@ DATABASES = {
         'PORT': '5432',
         'CONN_MAX_AGE': 0,
     }
+}
+
+
+PUSH_NOTIFICATIONS_SETTINGS = {
+    "FCM_API_KEY": "AAAAdP7JCPQ:APA91bGdRe148TLzC2QZO_d_RJVrfgxw21jQ7Na0kderD-_C9DCBUi0Gmxt3OLKEp4Vcyb-KaJeNiefcjR-nQBotnwE-hLzsuyylqviFEGJpQ-taez6IATI_df6SZ3_TD6rgi39N_czr",
+    "APNS_CERTIFICATE": "/path/to/your/certificate.pem",
+    "APNS_TOPIC": "com.example.push_test",
+    "WNS_PACKAGE_SECURITY_ID": "[your package security id, e.g: 'ms-app://e-3-4-6234...']",
+    "WNS_SECRET_KEY": "[your app secret key, e.g.: 'KDiejnLKDUWodsjmewuSZkk']",
+    "WP_PRIVATE_KEY": "/path/to/your/private.pem",
+    "WP_CLAIMS": {'sub': "mailto: development@example.com"}
 }
 
 

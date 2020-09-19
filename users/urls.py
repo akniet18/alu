@@ -10,5 +10,8 @@ urlpatterns = [
     path("admin/login", login_admin.as_view()),
 
     path("detail/<id>", detailUser.as_view()),
-    path('avatar', Avatar.as_view())
+    path('avatar', Avatar.as_view()),
+
+    path("push", pushRegister.as_view()),
+    path("send", SendPush.as_view())
 ]

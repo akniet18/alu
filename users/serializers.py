@@ -29,3 +29,8 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ("id", "avatar", "nickname", "phone")
         read_only_fields = ("avatar", "phone", "id")
+
+
+class pushSerializer(serializers.Serializer):
+	reg_id = serializers.CharField()
+	cmt = serializers.CharField()

@@ -17,6 +17,7 @@ from rest_framework.generics import RetrieveUpdateDestroyAPIView, GenericAPIView
 from datetime import datetime
 from products.models import *
 from utils.compress import *
+from push_notifications.models import APNSDevice, GCMDevice
 # from django_auto_prefetching import AutoPrefetchViewSetMixin
 
 
@@ -202,3 +203,33 @@ class admin_side_get_view(APIView):
             p = Product.object.filter(category__isnull = True)
         elif user.role == User.ROLE_CONTROL_DEPARTMENT:
             p = Product.object.filter(category__isnull = True)
+
+
+
+class pushRegister(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def post(self, request):
+        s = pushSerializer(data=request.data)
+        if s.is_valid():
+            cmt = s.validated_data['cmt']
+            if cmt == "apn":
+                APNSDevice.objects.get_or_create(user = request.user, 
+                                        defaults={'registration_id': s.validated_data['reg_id']})
+            else:
+                GCMDevice.objects.get_or_create(user=request.user,
+                                        defaults={'registration_id': s.validated_data['reg_id']},
+                                        cloud_message_type="FCM")
+            return Response({'status': "ok"})
+        else:
+            return Response(s.errors)
+
+from utils.push import send_push
+class SendPush(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def get(self, request):
+        user = User.objects.get(id=1)
+        print(user)
+        send_push(user, "text")
+        return Response({'starus': "ok"})
