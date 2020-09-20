@@ -325,7 +325,7 @@ class ToDeliverDate(APIView):
         s = OrderidSer(data = request.data)
         if s.is_valid():
             o = Rented.objects.get(id = s.validated_data['order_id'])
-            o.is_check = True
+            o.is_checked = True
             o.save()
             if o.get_product == 1:
                 m = Message.objects.create(

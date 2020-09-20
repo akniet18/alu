@@ -328,35 +328,3 @@ class productInStock(APIView):
         s = getProductSerializer(queryset, many=True, context={'request': request})
         return Response(s.data)
 
-
-def send_push():
-    p = Product.objects.filter(is_rented=True, count_day__isnull=False, rented_obj__is_rented=True)
-    a = []
-    for i in p:
-        r = i.rented_obj.all()[0]
-        rented = datetime.strptime(str(r.rented_day), '%Y-%m-%d')
-        deadline = rented + timedelta(i.count_day)
-        if datetime.now() < deadline:
-            days_left = datetime.now()-deadline
-            # print(abs(days_left.days))
-            if abs(days_left.days) == 1:
-                # a.append(i)
-                if r.return_product == 1:
-                    mid = Message.objects.create(
-                        user = r.user,
-                        text = deliverThree(i.title),
-                        action = 2,
-                        order = r,
-                        product = i,
-                        get_or_return = 2
-                    )
-                else:
-                    mid = Message.objects.create(
-                        user = r.user,
-                        text = PickupThree(i.title),
-                        action = 1,
-                        order = r,
-                        product = i,
-                        get_or_return = 2
-                    )
-    return "ok"
