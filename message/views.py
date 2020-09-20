@@ -30,7 +30,8 @@ class MessageApi(APIView):
                 "text": i.text,
                 'action': i.action,
                 'is_readed': i.is_readed,
-                'created': i.created
+                'created': i.created,
+                "words": i.words
             })
             if i.action == 1:
                 i.is_readed = True

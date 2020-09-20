@@ -83,7 +83,8 @@ class rentedApi(APIView):
                         ownerorclient = 1,
                         action = 3,
                         product = p,
-                        get_or_return = 1
+                        get_or_return = 1,
+                        words = [p.title]
                     )
                     send_push(p.owner, m.text)
             r = Rented.objects.create(
@@ -102,7 +103,8 @@ class rentedApi(APIView):
                     user = r.user,
                     text = deliverOne(r.id, r.product.all(), r.get_address, r.user.phone, r.get_product, r.return_product, r.amount),
                     action = 1,
-                    order = r
+                    order = r,
+                    words = [r.id, r.get_address, r.user.phone, r.get_product, r.return_product, r.amount]
                 )
                 send_push(r.user, m.text)
             else:
@@ -110,7 +112,8 @@ class rentedApi(APIView):
                     user = r.user,
                     text = PickupOne(r.id, r.product.all(), r.user.phone, r.amount),
                     action = 1,
-                    order = r
+                    order = r,
+                    words = [r.id, r.user.phone, r.amount]
                 )
                 send_push(r.user, m.text)
             request.user.basket.clear()
@@ -172,7 +175,8 @@ class AcceptOrRejectRent(APIView):
                         ownerorclient = 1,
                         product = i,
                         order = r,
-                        text = pickUPoint(i.title)
+                        text = pickUPoint(i.title),
+                        words = [i.title]
                     )
                     send_push(i.owner, m.text)
             return Response({'status': "ok"})
@@ -187,7 +191,8 @@ class adminNewRentedApi(APIView):
         queryset = Rented.objects.filter(is_rented=False, is_ended=False, is_checked=False)
         serializer_class = rentedSerializer(queryset, many=True, context={'request': request})
         return Response(serializer_class.data)
-
+    
+    # 
     def post(self, request):
         s = productIdSer(data=request.data)
         if s.is_valid():
@@ -205,7 +210,8 @@ class adminNewRentedApi(APIView):
                     action = 3,
                     product = i,
                     get_or_return = 1,
-                    order = r
+                    order = r,
+                    words = [i.title]
                 )
                 send_push(i.owner, m.text)
             if r.get_product == 1:
@@ -213,7 +219,8 @@ class adminNewRentedApi(APIView):
                     user = r.user,
                     text = deliverOne(r.id, r.product.all(), r.get_address, r.user.phone),
                     action = 1,
-                    order = r
+                    order = r,
+                    words = [r.id, r.get_address, r.user.phone]
                 )
                 send_push(r.user, m.text)
             else:
@@ -221,7 +228,8 @@ class adminNewRentedApi(APIView):
                     user = r.user,
                     text = PickupOne(r.id, r.product.all(), r.user.phone),
                     action = 1,
-                    order = r
+                    order = r,
+                    words = [r.id, r.user.phone]
                 )
                 send_push(r.user, m.text)
             return Response({"status": "ok"})
@@ -270,7 +278,8 @@ class DeliverToPickUp(APIView):
                     action = 2,
                     product = i,
                     get_or_return = 1,
-                    order = r
+                    order = r,
+                    words = [i.title]
                 )
             return Response({'status': 'ok'})
         else:
@@ -335,7 +344,8 @@ class ToDeliverDate(APIView):
                     order = o,
                     get_or_return = 1,
                     action = 2,
-                    ownerorclient = 2
+                    ownerorclient = 2,
+                    words = [o.id]
                 )
                 send_push(o.user, m.text)
             else:
@@ -345,7 +355,8 @@ class ToDeliverDate(APIView):
                     order = o,
                     action = 1,
                     get_or_return = 1,
-                    ownerorclient = 2
+                    ownerorclient = 2,
+                    words = [o.id]
                 )   
                 send_push(o.user, m.text)             
             return Response({"status": "ok"})

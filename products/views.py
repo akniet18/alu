@@ -20,6 +20,7 @@ from message.models import Message
 from datetime import datetime, timedelta
 from utils.push import send_push
 
+
 class getProduct(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny,]
     queryset = Product.objects.filter(is_publish=True)
@@ -180,7 +181,8 @@ class ProductPublish(APIView):
             m = Message.objects.create(
                 user = product.owner,
                 action = 1,
-                text = product_publish(product.title)
+                text = product_publish(product.title),
+                words = [product.title]
             )
             send_push(product.owner, m.text)
             return Response({"status": "ok"})
@@ -250,13 +252,15 @@ class ReturnApi(APIView):
                 ownerorclient = 1,
                 product = p,
                 order = r,
-                text = pickUPoint(p.title)
+                text = pickUPoint(p.title),
+                words = [p.title]
             )
             m2 = Message.objects.create(
                 user = p.owner,
                 action = 1,
                 product = p,
-                text = product_publish(p.title)
+                text = product_publish(p.title),
+                words = [p.title]
             )
             send_push(p.owner, m1.text)
             send_push(p.owner, m2.text)

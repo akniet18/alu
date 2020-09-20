@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.postgres.fields import ArrayField
 
 class Message(models.Model):
     text = models.TextField()
@@ -10,6 +10,7 @@ class Message(models.Model):
     order = models.ForeignKey("basket.Rented", on_delete=models.CASCADE, null=True, blank=True)
     product = models.ForeignKey("products.Product", on_delete=models.CASCADE, null=True, blank=True)
     get_or_return = models.IntegerField(null=True, blank=True)
+    words = ArrayField(models.CharField(max_length=50),  10, null=True, blank=True)
 
     created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     is_readed = models.BooleanField(default=False, blank=True)
