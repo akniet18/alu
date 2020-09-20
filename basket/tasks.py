@@ -9,15 +9,12 @@ from products.models import Product
 from message.models import Message
 from utils.messages import deliverThree, PickupThree
 from huey import crontab
-
+from utils.push import send_push
 from huey.contrib.djhuey import db_periodic_task, db_task
 
 # @periodic_task(run_every=timedelta(seconds=10))
 @db_periodic_task(crontab(minute=0, hour=9))
-def send_notifiction():
-    print('Here I\’m')
-    
-    # send_push()
+def send_notifiction():    
     p = Product.objects.filter(is_rented=True, count_day__isnull=False, rented_obj__is_rented=True)
     for i in p:
         r = i.rented_obj.all()[0]
@@ -38,6 +35,7 @@ def send_notifiction():
                         get_or_return = 2,
                         ownerorclient = 2
                     )
+                    send_push(r.user, mid.text)
                 else:
                     mid = Message.objects.create(
                         user = r.user,
@@ -48,6 +46,7 @@ def send_notifiction():
                         get_or_return = 2,
                         ownerorclient = 2
                     )
+                    send_push(r.user, mid.text)
     return "ok"
     
 
