@@ -91,8 +91,7 @@ class rentedApi(APIView):
                 return_product = return_product,
                 return_address = return_address,
                 get_address = get_address,
-                amount = amount,
-                is_checked = True
+                amount = amount
             )
             for i in products:
                 r.product.add(i)
@@ -253,7 +252,7 @@ class DeliverToPickUp(APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request):
-        queryset = Rented.objects.filter(is_rented=False, is_ended=False, is_checked=True)
+        queryset = Rented.objects.filter(is_rented=False, is_ended=False, is_checked=False)
         serializer_class = rentedSerializer(queryset, many=True, context={'request': request})
         return Response(serializer_class.data)
 
@@ -326,6 +325,8 @@ class ToDeliverDate(APIView):
         s = OrderidSer(data = request.data)
         if s.is_valid():
             o = Rented.objects.get(id = s.validated_data['order_id'])
+            o.is_check = True
+            o.save()
             if o.get_product == 1:
                 m = Message.objects.create(
                     user = o.user,

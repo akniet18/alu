@@ -238,6 +238,7 @@ class ReturnApi(APIView):
             p.count_day = None
             p.get_date = None
             p.in_stock = True
+            p.return_date = None
             p.save()
             r = p.rented_obj.all()[0]
             r.is_ended = True
@@ -310,6 +311,9 @@ class ReturnProduct(APIView):
         if s.is_valid():
             p = Product.objects.get(id=s.validated_data['product'])
             p.in_stock = False
+            p.get_date = None
+            p.return_date = None
+            p.leave = False
             p.save()
             return Response({'status': 'ok'})
         else:
