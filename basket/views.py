@@ -70,6 +70,7 @@ class rentedApi(APIView):
                     i = eval(i)
                 p = Product.objects.get(id=i['id'])
                 if p.is_rented:
+                    request.user.basket.clear()
                     return Response({"status": "already to rent"})
                 p.count_day = i['count_day']
                 p.is_rented = True
