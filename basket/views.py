@@ -95,8 +95,14 @@ class rentedApi(APIView):
                 get_address = get_address,
                 amount = amount
             )
+            w = [r.id, r.get_address, r.user.phone, str(r.amount)+" тг"]
             for i in products:
                 r.product.add(i)
+                if i.count_day == 14:
+                    w.append(i.price_14)
+                else:
+                    w.append(i.price_30)
+                w.append(i.title)
             r.save()
             if r.get_product == 1:
                 m = Message.objects.create(
@@ -104,7 +110,7 @@ class rentedApi(APIView):
                     text = deliverOne(r.id, r.product.all(), r.get_address, r.user.phone, r.get_product, r.return_product, r.amount),
                     action = 1,
                     order = r,
-                    words = [r.id, r.get_address, r.user.phone, r.get_product, r.return_product, r.amount]
+                    words = w
                 )
                 send_push(r.user, m.text)
             else:
@@ -113,7 +119,7 @@ class rentedApi(APIView):
                     text = PickupOne(r.id, r.product.all(), r.user.phone, r.amount),
                     action = 1,
                     order = r,
-                    words = [r.id, r.user.phone, r.amount]
+                    words = w
                 )
                 send_push(r.user, m.text)
             request.user.basket.clear()
