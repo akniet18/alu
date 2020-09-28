@@ -19,7 +19,10 @@ from products.models import *
 from utils.compress import *
 from push_notifications.models import APNSDevice, GCMDevice
 from utils.push import send_push
+from utils.smsc_api import SMSC
 # from django_auto_prefetching import AutoPrefetchViewSetMixin
+smsc = SMSC()
+
 
 
 class PhoneCode(APIView):
@@ -43,7 +46,7 @@ class PhoneCode(APIView):
             else:
                 PhoneOTP.objects.create(phone=phone, otp=str(rand), nickname=nickname)
                 # PhoneOTP.objects.create(phone=phone, nickname=nickname, otp=str(1111))
-            # smsc.send_sms(s.validated_data['phone'], "Код подтверждения: "+str(rand) + " Fixup", sender="sms")
+            smsc.send_sms(phone, "Ваш код ALU: "+str(rand), sender="sms")
             return Response({'status': 'ok'})
         else:
             return Response(s.errors)
@@ -103,6 +106,7 @@ class LoginUser(APIView):
                     a.save()
                 else:
                     PhoneOTP.objects.create(phone=phone, otp=str(rand))
+                smsc.send_sms(phone, "Ваш код ALU: "+str(rand), sender="sms")
                 return Response({'status': "ok"})
             else:
                 return Response({'status': 'not found'})
