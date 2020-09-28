@@ -7,6 +7,6 @@ def send_push(user, text, action=None):
     b = GCMDevice.objects.filter(user = user)
     print(a)
     if a.exists():
-        a[0].send_message(text)
+        a[0].send_message(text, badge=1, sound="default")
     elif b.exists():
         b[0].send_message(text)
