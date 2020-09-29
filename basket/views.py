@@ -86,7 +86,7 @@ class rentedApi(APIView):
                         get_or_return = 1,
                         words = [p.title]
                     )
-                    send_push(p.owner, m.text)
+                    send_push(p.owner, push2())
             r = Rented.objects.create(
                 user = request.user,
                 get_product = get_product,
@@ -112,7 +112,7 @@ class rentedApi(APIView):
                     order = r,
                     words = w
                 )
-                send_push(r.user, m.text)
+                send_push(r.user, push4())
             else:
                 m = Message.objects.create(
                     user = r.user,
@@ -121,7 +121,7 @@ class rentedApi(APIView):
                     order = r,
                     words = w
                 )
-                send_push(r.user, m.text)
+                send_push(r.user, push4())
             request.user.basket.clear()
             return Response({'status': 'ok'})
         else:
@@ -184,7 +184,7 @@ class AcceptOrRejectRent(APIView):
                         text = pickUPoint(i.title),
                         words = [i.title]
                     )
-                    send_push(i.owner, m.text)
+                    send_push(i.owner, push3())
             return Response({'status': "ok"})
         else:
             return Response(s.errors)
@@ -353,7 +353,7 @@ class ToDeliverDate(APIView):
                     ownerorclient = 2,
                     words = [o.id]
                 )
-                send_push(o.user, m.text)
+                send_push(o.user, push5())
             else:
                 m = Message.objects.create(
                     user = o.user,
@@ -364,7 +364,7 @@ class ToDeliverDate(APIView):
                     ownerorclient = 2,
                     words = [o.id]
                 )   
-                send_push(o.user, m.text)             
+                send_push(o.user, push5())             
             return Response({"status": "ok"})
         else:
             return Response(s.errors)

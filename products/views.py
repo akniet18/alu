@@ -184,7 +184,7 @@ class ProductPublish(APIView):
                 text = product_publish(product.title),
                 words = [product.title]
             )
-            send_push(product.owner, m.text)
+            send_push(product.owner, push1())
             return Response({"status": "ok"})
         else:
             return Response(s.errors)
@@ -262,8 +262,8 @@ class ReturnApi(APIView):
                 text = product_publish(p.title),
                 words = [p.title]
             )
-            send_push(p.owner, m1.text)
-            send_push(p.owner, m2.text)
+            send_push(p.owner, push3())
+            send_push(p.owner, push1())
             return Response({'status': 'ok'})
         else:
             return Response(s.errors)

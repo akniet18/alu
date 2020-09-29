@@ -3,8 +3,6 @@ from push_notifications.models import APNSDevice, GCMDevice
 
 
 def send_push(user, text, action=None):
-    text = text.replace("**", " ")
-    text = text.replace("*", " ")
     a = APNSDevice.objects.filter(user = user)
     b = GCMDevice.objects.filter(user = user)
     if a.exists():
