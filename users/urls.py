@@ -13,5 +13,7 @@ urlpatterns = [
     path('avatar', Avatar.as_view()),
 
     path("push", pushRegister.as_view()),
-    path("send", SendPush.as_view())
+    path("send", SendPush.as_view()),
+
+    path("private/policy", privatepolicy)
 ]

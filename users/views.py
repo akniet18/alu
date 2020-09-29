@@ -230,6 +230,11 @@ class pushRegister(APIView):
             return Response(s.errors)
 
 
+def privatepolicy(request):
+    context = {'context': ""}
+    return render(request, 'index.html', context)
+
+
 class SendPush(APIView):
     permission_classes = (permissions.AllowAny,)
 
