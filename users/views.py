@@ -222,7 +222,7 @@ class pushRegister(APIView):
                 APNSDevice.objects.get_or_create(user = request.user, 
                                         defaults={'registration_id': s.validated_data['reg_id']})
             else:
-                GCMDevice.objects.get_or_create(user=request.user,
+                GCMDevice.objects.get_or_create(user=request.user, is_active=True,
                                         defaults={'registration_id': s.validated_data['reg_id']},
                                         cloud_message_type="FCM")
             return Response({'status': "ok"})
