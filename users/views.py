@@ -38,7 +38,7 @@ class PhoneCode(APIView):
                 phone = "+" + phone
             if phone == "+77783579279":
                 a,s = PhoneOTP.objects.get_or_create(phone=phone, defaults={"otp":"1111", "nickname":nickname})
-                print(a)
+                print(a, s)
             else:
                 if PhoneOTP.objects.filter(phone = phone).exists():
                     a = PhoneOTP.objects.get(phone = phone)
