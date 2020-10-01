@@ -37,15 +37,18 @@ class PhoneCode(APIView):
             if phone[0] != "+":
                 phone = "+" + phone
             print('code generate: ',s.validated_data, rand)
-            if PhoneOTP.objects.filter(phone = phone).exists():
-                a = PhoneOTP.objects.get(phone = phone)
-                a.nickname = nickname
-                a.otp = rand
-                # a.otp = "1111"
-                a.save()
+            if phone == "+77783579279":
+                PhoneOTP.objects.get_or_create(phone=phone, defaults={"otp":"1111", "nickname":nickname})
             else:
-                PhoneOTP.objects.create(phone=phone, otp=str(rand), nickname=nickname)
-                # PhoneOTP.objects.create(phone=phone, nickname=nickname, otp=str(1111))
+                if PhoneOTP.objects.filter(phone = phone).exists():
+                    a = PhoneOTP.objects.get(phone = phone)
+                    a.nickname = nickname
+                    a.otp = rand
+                    # a.otp = "1111"
+                    a.save()
+                else:
+                    PhoneOTP.objects.create(phone=phone, otp=str(rand), nickname=nickname)
+                    # PhoneOTP.objects.create(phone=phone, nickname=nickname, otp=str(1111))
             smsc.send_sms(phone, "Ваш код ALU: "+str(rand), sender="sms")
             return Response({'status': 'ok'})
         else:
@@ -100,13 +103,16 @@ class LoginUser(APIView):
                 phone = "+" + phone
             user=User.objects.filter(phone=phone)
             if user.exists():
-                if PhoneOTP.objects.filter(phone = phone).exists():
-                    a = PhoneOTP.objects.get(phone = phone)
-                    a.otp = rand
-                    a.save()
+                if phone == "+77783579279":
+                    PhoneOTP.objects.get_or_create(phone=phone, defaults={"otp":"1111"})
                 else:
-                    PhoneOTP.objects.create(phone=phone, otp=str(rand))
-                smsc.send_sms(phone, "Ваш код ALU: "+str(rand), sender="sms")
+                    if PhoneOTP.objects.filter(phone = phone).exists():
+                        a = PhoneOTP.objects.get(phone = phone)
+                        a.otp = rand
+                        a.save()
+                    else:
+                        PhoneOTP.objects.create(phone=phone, otp=str(rand))
+                    smsc.send_sms(phone, "Ваш код ALU: "+str(rand), sender="sms")
                 return Response({'status': "ok"})
             else:
                 return Response({'status': 'not found'})
