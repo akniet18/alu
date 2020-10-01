@@ -49,7 +49,7 @@ class PhoneCode(APIView):
                 else:
                     PhoneOTP.objects.create(phone=phone, otp=str(rand), nickname=nickname)
                     # PhoneOTP.objects.create(phone=phone, nickname=nickname, otp=str(1111))
-            smsc.send_sms(phone, "Ваш код ALU: "+str(rand), sender="sms")
+                smsc.send_sms(phone, "Ваш код ALU: "+str(rand), sender="sms")
             return Response({'status': 'ok'})
         else:
             return Response(s.errors)
