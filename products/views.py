@@ -100,7 +100,7 @@ class product(APIView):
             if images:
                 for i, val in enumerate(images):
                     im = base64img(val, str(p.id)+str(i))
-                    img = compress_image(im, (200, 200))
+                    img = compress_image(im, (500, 500))
                     ProductImage.objects.create(
                         product = p,
                         image = img
