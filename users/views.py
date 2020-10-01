@@ -36,9 +36,9 @@ class PhoneCode(APIView):
             phone = s.validated_data['phone']
             if phone[0] != "+":
                 phone = "+" + phone
-            print('code generate: ',s.validated_data, rand)
             if phone == "+77783579279":
-                PhoneOTP.objects.get_or_create(phone=phone, defaults={"otp":"1111", "nickname":nickname})
+                a,s = PhoneOTP.objects.get_or_create(phone=phone, defaults={"otp":"1111", "nickname":nickname})
+                print(a)
             else:
                 if PhoneOTP.objects.filter(phone = phone).exists():
                     a = PhoneOTP.objects.get(phone = phone)
