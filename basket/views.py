@@ -95,7 +95,9 @@ class rentedApi(APIView):
                 get_address = get_address,
                 amount = amount
             )
-            w = [r.id, r.get_address, r.user.phone, str(r.amount)+" тг"]
+            w = [r.id, r.user.phone, str(r.amount)+" тг"]
+            if r.get_product == 1:
+                w.append(r.get_address)
             for i in products:
                 r.product.add(i)
                 if i.count_day == 14:
@@ -103,6 +105,7 @@ class rentedApi(APIView):
                 else:
                     w.append(i.price_30)
                 w.append(i.title)
+                
             r.save()
             if r.get_product == 1:
                 m = Message.objects.create(
