@@ -232,11 +232,22 @@ class pushRegister(APIView):
         if s.is_valid():
             cmt = s.validated_data['cmt']
             if cmt == "apn":
-                APNSDevice.objects.get_or_create(user = request.user, 
-                                        defaults={'registration_id': s.validated_data['reg_id']})
+                ios = APNSDevice.objects.filter(user = request.user)
+                if ios.exists():
+                    ios = APNSDevice.objects.get(user = request.user)
+                    ios.registration_id = s.validated_data['reg_id']
+                    ios.save()
+                else:
+                    APNSDevice.objects.create(user=request.user, registration_id=s.validated_data['reg_id'])
             else:
-                GCMDevice.objects.get_or_create(user=request.user, active=True,
-                                        defaults={'registration_id': s.validated_data['reg_id']},
+                android = GCMDevice.objects.filter(user=request.user)
+                if android.exists():
+                    android = GCMDevice.objects.get(user=request.user)
+                    android.registration_id = s.validated_data['reg_id']
+                    android.save()
+                else:
+                    GCMDevice.objects.create(user=request.user, active=True,
+                                        registration_id=s.validated_data['reg_id'],
                                         cloud_message_type="FCM")
             return Response({'status': "ok"})
         else:
