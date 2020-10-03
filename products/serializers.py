@@ -58,6 +58,7 @@ class ProductPublishSerializer(serializers.ModelSerializer):
 class ProductChangeSer(serializers.Serializer):
     id = serializers.IntegerField(required=False)
     about = serializers.CharField(required=False)
+    title = serializers.CharField(required=False)
     price_14 = serializers.IntegerField(required=False)
     price_30 = serializers.IntegerField(required=False)
 

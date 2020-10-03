@@ -155,12 +155,15 @@ class ProductChange(APIView):
             price_14 = s.validated_data.get("price_14", None)
             price_30 = s.validated_data.get("price_30", None)
             about = s.validated_data.get("about", None)
+            title = s.validated_data.get("title", None)
             if price_14:
                 p.price_14 = price_14
             if price_30:
                 p.price_30 = price_30
             if about:
                 p.about = about
+            if title:
+                p.title = title
             p.save()
             return Response({'status': 'ok'})
         else:
