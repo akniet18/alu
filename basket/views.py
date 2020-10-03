@@ -200,51 +200,7 @@ class adminNewRentedApi(APIView):
         queryset = Rented.objects.filter(is_rented=False, is_ended=False, is_checked=False)
         serializer_class = rentedSerializer(queryset, many=True, context={'request': request})
         return Response(serializer_class.data)
-    
-    # 
-    def post(self, request):
-        s = productIdSer(data=request.data)
-        if s.is_valid():
-            r = Rented.objects.get(id=s.validated_data['product'])
-            r.is_checked = True
-            r.save()
-            for i in r.product.all():
-                p = i
-                p.is_rented = True
-                p.save()
-                m = Message.objects.create(
-                    user = i.owner,
-                    text = deliverthenpickup(i.title),
-                    ownerorclient = 1,
-                    action = 3,
-                    product = i,
-                    get_or_return = 1,
-                    order = r,
-                    words = [i.title]
-                )
-                send_push(i.owner, m.text)
-            if r.get_product == 1:
-                m = Message.objects.create(
-                    user = r.user,
-                    text = deliverOne(r.id, r.product.all(), r.get_address, r.user.phone),
-                    action = 1,
-                    order = r,
-                    words = [r.id, r.get_address, r.user.phone]
-                )
-                send_push(r.user, m.text)
-            else:
-                m = Message.objects.create(
-                    user = r.user,
-                    text = PickupOne(r.id, r.product.all(), r.user.phone),
-                    action = 1,
-                    order = r,
-                    words = [r.id, r.user.phone]
-                )
-                send_push(r.user, m.text)
-            return Response({"status": "ok"})
-        else:
-            return Response(s.errors)
-
+  
 
 class adminRentedApi(APIView):
     permission_classes = (permissions.IsAuthenticated,)
@@ -274,26 +230,6 @@ class DeliverToPickUp(APIView):
         serializer_class = rentedSerializer(queryset, many=True, context={'request': request})
         return Response(serializer_class.data)
 
-    # 
-    def post(self, request):
-        s = productIdSer(data=request.data)
-        if s.is_valid():
-            r = Rented.objects.get(id=s.validated_data['product'])
-            for i in r.product.all():
-                Message.objects.create(
-                    user = i.owner,
-                    text = deliverthenpickup(i.title),
-                    ownerorclient = 1,
-                    action = 2,
-                    product = i,
-                    get_or_return = 1,
-                    order = r,
-                    words = [i.title]
-                )
-            return Response({'status': 'ok'})
-        else:
-            return Response(s.errors)
-
 
 class inStock(APIView):
     permission_classes = (permissions.IsAuthenticated,)
@@ -303,34 +239,7 @@ class inStock(APIView):
         if s.is_valid():
             r = Product.objects.get(id=s.validated_data['product'])
             r.in_stock = True
-            r.save()
-            # order = r.rented_obj.all()[1]
-            # c = False
-            # for j in order.product.all():
-            #     if j.in_stock == True:
-            #         c = True
-            #     else:
-            #         c = False
-            #         break
-            # if c:
-            #     if order.get_product == 1:
-            #         Message.objects.create(
-            #             user = order.user,
-            #             text = deliverTwo(order.id),
-            #             order = order,
-            #             get_or_return = 1,
-            #             action = 2,
-            #             ownerorclient = 2
-            #         )
-            #     else:
-            #         Message.objects.create(
-            #             user = order.user,
-            #             text = PickupTwo(order.id),
-            #             order = order,
-            #             get_or_return = 1,
-            #             action = 1,
-            #             ownerorclient = 2
-            #         )   
+            r.save() 
             return Response({'status': "ok"})
         else:
             return Response(s.errors)
@@ -378,7 +287,6 @@ class deliver(APIView):
 
     def get(self, request):
         r = Rented.objects.filter(is_rented=False)
-        print(r)
         a = []
         for i in r:
             c = False

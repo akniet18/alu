@@ -212,17 +212,6 @@ class login_admin(APIView):
             return Response(s.errors)
 
 
-class admin_side_get_view(APIView):
-    permission_classes = [permissions.IsAuthenticated, ]
-
-    def get(self, request):
-        user = request.user
-        if user.role == User.ROLE_SALES_DEPARTMENT:
-            p = Product.object.filter(category__isnull = True)
-        elif user.role == User.ROLE_CONTROL_DEPARTMENT:
-            p = Product.object.filter(category__isnull = True)
-
-
 
 class pushRegister(APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -258,12 +247,3 @@ def privatepolicy(request):
     context = {'context': ""}
     return render(request, 'index.html', context)
 
-
-class SendPush(APIView):
-    permission_classes = (permissions.AllowAny,)
-
-    def get(self, request):
-        user = User.objects.get(id=1)
-        print(user)
-        send_push(user, "Здравствуйте! Вами оформлен заказ №12345 Планируемый срок формирования заказа — от 1 до 3 дней Уведомления обо всех изменениях заказа и даты комплектации товаров Вы получите в разделе 'Сообщения'. Заказанные товары: Книга 'Растворится в воздухе' - 1 300 тг на 30 дней Книга 'осле меня' - 2 300 тг на 60 дней Метод доставки: Курьерская доставка стоимость доставки: 800 тг. Адрес доставки: ул. Тимирязева 26 (значение из заполненного поля доставка) Итого: 6500 тг Контактный номер, (значение номера при регистрации на платформе) Благодарим Вас за то, что Вы выбрали нашу платформу ALU.KZ! Мы рады, что Вы являетесь нашим клиентом. Если у Вас возникнут вопросы, пожалуйста, обращайтесь к нам.")
-        return Response({'starus': "ok"})

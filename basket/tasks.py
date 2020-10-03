@@ -20,33 +20,34 @@ def send_notifiction():
         r = i.rented_obj.all()[0]
         rented = datetime.strptime(str(r.rented_day), '%Y-%m-%d')
         deadline = rented + timedelta(i.count_day)
-        if datetime.now() < deadline:
-            days_left = datetime.now()-deadline
-            # print(abs(days_left.days))
-            if abs(days_left.days) == 1:
-                # a.append(i)
-                if r.return_product == 1:
-                    mid = Message.objects.create(
-                        user = r.user,
-                        text = deliverThree(i.title),
-                        action = 2,
-                        order = r,
-                        product = i,
-                        get_or_return = 2,
-                        ownerorclient = 2
-                    )
-                    send_push(r.user, mid.text)
-                else:
-                    mid = Message.objects.create(
-                        user = r.user,
-                        text = PickupThree(i.title),
-                        action = 1,
-                        order = r,
-                        product = i,
-                        get_or_return = 2,
-                        ownerorclient = 2
-                    )
-                    send_push(r.user, mid.text)
+        days_left = datetime.now()-deadline
+        days_left = int(days_left.total_seconds()) // (24 * 3600)
+        print(days_left)
+        if days_left == -1:            
+            if r.return_product == 1:
+                mid = Message.objects.create(
+                    user = r.user,
+                    text = deliverThree(i.title),
+                    action = 2,
+                    order = r,
+                    product = i,
+                    get_or_return = 2,
+                    ownerorclient = 2,
+                    words = [i.title]
+                )
+                send_push(r.user, mid.text)
+            else:
+                mid = Message.objects.create(
+                    user = r.user,
+                    text = PickupThree(i.title),
+                    action = 1,
+                    order = r,
+                    product = i,
+                    get_or_return = 2,
+                    ownerorclient = 2,
+                    words = [i.title]
+                )
+                send_push(r.user, mid.text)
     return "ok"
     
 
