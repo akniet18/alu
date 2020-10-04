@@ -114,10 +114,7 @@ PUSH_NOTIFICATIONS_SETTINGS = {
     "FCM_API_KEY": "AAAAdP7JCPQ:APA91bGdRe148TLzC2QZO_d_RJVrfgxw21jQ7Na0kderD-_C9DCBUi0Gmxt3OLKEp4Vcyb-KaJeNiefcjR-nQBotnwE-hLzsuyylqviFEGJpQ-taez6IATI_df6SZ3_TD6rgi39N_czr",
     "APNS_CERTIFICATE": "aps.pem",
     "APNS_TOPIC": "com.kz.ALU",
-    "WNS_PACKAGE_SECURITY_ID": "[your package security id, e.g: 'ms-app://e-3-4-6234...']",
-    "WNS_SECRET_KEY": "[your app secret key, e.g.: 'KDiejnLKDUWodsjmewuSZkk']",
-    "WP_PRIVATE_KEY": "/path/to/your/private.pem",
-    "WP_CLAIMS": {'sub': "mailto: development@example.com"}
+    'APNS_USE_SANDBOX': False
 }
 
 
