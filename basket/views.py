@@ -65,6 +65,7 @@ class rentedApi(APIView):
             get_address = s.validated_data.get("get_address", None)
             return_address = s.validated_data.get("return_address", None)           
             products = []
+            days = []
             for i in pr:
                 if type(i) == str:
                     i = eval(i)
@@ -73,6 +74,7 @@ class rentedApi(APIView):
                     request.user.basket.clear()
                     return Response({"status": "already to rent"})
                 products.append(p)
+                days.append(i['count_day'])
                 
             r = Rented.objects.create(
                 user = request.user,
@@ -86,7 +88,7 @@ class rentedApi(APIView):
             if r.get_product == 1:
                 w.append(r.get_address)
             for (ind, i) in enumerate(products):
-                i.count_day = pr[ind]['count_day']
+                i.count_day = days[ind]
                 i.is_rented = True
                 i.save()
                 if i.in_stock == False:
