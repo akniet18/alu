@@ -7,13 +7,13 @@ from datetime import datetime, timedelta
 # from celery import app
 from products.models import Product
 from message.models import Message
-from utils.messages import deliverThree, PickupThree
+from utils.messages import push6, PickupThree, deliverThree
 from huey import crontab
 from utils.push import send_push
 from huey.contrib.djhuey import db_periodic_task, db_task
 
 # @periodic_task(run_every=timedelta(seconds=10))
-@db_periodic_task(crontab(minute=0, hour=9))
+@db_periodic_task(crontab(minute="*/1"))
 def send_notifiction():    
     p = Product.objects.filter(is_rented=True, count_day__isnull=False, rented_obj__is_rented=True)
     for i in p:
@@ -22,7 +22,6 @@ def send_notifiction():
         deadline = rented + timedelta(i.count_day)
         days_left = datetime.now()-deadline
         days_left = int(days_left.total_seconds()) // (24 * 3600)
-        print(days_left)
         if days_left == -1:            
             if r.return_product == 1:
                 mid = Message.objects.create(
@@ -35,7 +34,7 @@ def send_notifiction():
                     ownerorclient = 2,
                     words = [i.title]
                 )
-                send_push(r.user, mid.text)
+                send_push(r.user, push6())
             else:
                 mid = Message.objects.create(
                     user = r.user,
@@ -47,7 +46,7 @@ def send_notifiction():
                     ownerorclient = 2,
                     words = [i.title]
                 )
-                send_push(r.user, mid.text)
+                send_push(r.user, push6())
     return "ok"
     
 

@@ -72,21 +72,8 @@ class rentedApi(APIView):
                 if p.is_rented:
                     request.user.basket.clear()
                     return Response({"status": "already to rent"})
-                p.count_day = i['count_day']
-                p.is_rented = True
-                p.save()
                 products.append(p)
-                if p.in_stock == False:
-                    m = Message.objects.create(
-                        user = p.owner,
-                        text = deliverthenpickup(p.title),
-                        ownerorclient = 1,
-                        action = 3,
-                        product = p,
-                        get_or_return = 1,
-                        words = [p.title]
-                    )
-                    send_push(p.owner, push2())
+                
             r = Rented.objects.create(
                 user = request.user,
                 get_product = get_product,
@@ -98,14 +85,27 @@ class rentedApi(APIView):
             w = [r.id, r.user.phone, str(r.amount)+" тг"]
             if r.get_product == 1:
                 w.append(r.get_address)
-            for i in products:
+            for (ind, i) in enumerate(products):
+                i.count_day = pr[ind]['count_day']
+                i.is_rented = True
+                i.save()
+                if i.in_stock == False:
+                    m = Message.objects.create(
+                        user = i.owner,
+                        text = deliverthenpickup(i.title),
+                        ownerorclient = 1,
+                        action = 3,
+                        product = i,
+                        get_or_return = 1,
+                        words = [i.title]
+                    )
+                    send_push(i.owner, push2())
                 r.product.add(i)
                 if i.count_day == 14:
                     w.append(i.price_14)
                 else:
                     w.append(i.price_30)
                 w.append(i.title)
-                
             r.save()
             if r.get_product == 1:
                 m = Message.objects.create(
