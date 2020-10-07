@@ -65,7 +65,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     password1 = models.CharField(max_length=20, blank=True, null=True)
     password2 = models.CharField(max_length=20, blank=True, null=True)
     email = models.EmailField(max_length=255, unique=True, blank=True, null=True)
-    nickname = models.CharField(max_length=15, blank=True, null=True)
+    nickname = models.CharField(max_length=50, blank=True, null=True)
     birth_date = models.DateField(null=True, blank=True,
                                 auto_now=False,
                                 auto_now_add=False)
