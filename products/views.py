@@ -187,7 +187,8 @@ class ProductPublish(APIView):
                 user = product.owner,
                 action = 1,
                 text = product_publish(product.title),
-                words = [product.title]
+                words = [product.title],
+                product = product
             )
             send_push(product.owner, push1())
             return Response({"status": "ok"})
