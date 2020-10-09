@@ -62,8 +62,11 @@ class recomendations(APIView):
             r, created = Recomendation.objects.get_or_create(id=1)
             if product in r.products.all():
                 r.products.remove(product)
+                product.in_recomendation = False
             else:
                 r.products.add(product)
+                product.in_recomendation = True
+            product.save()
             return Response({'status': 'ok'})
         else:
             return Response(s.errors)

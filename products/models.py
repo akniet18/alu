@@ -20,6 +20,7 @@ class Product(models.Model):
     owner = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="my_product", null=True, blank=True)
     # 
     is_publish = models.BooleanField(default=False, blank=True, null=True)
+    in_recomendation = models.BooleanField(default=False, blank=True, null=True)
     
     is_rented = models.BooleanField(default=False, blank=True)
     in_stock = models.BooleanField(default=False, blank=True)
