@@ -19,9 +19,13 @@ from basket.serializers import *
 from message.models import Message
 from datetime import datetime, timedelta
 from utils.push import send_push
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+from django.views.decorators.vary import vary_on_cookie
+from django_auto_prefetching import AutoPrefetchViewSetMixin
 
 
-class getProduct(viewsets.ModelViewSet):
+class getProduct(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny,]
     queryset = Product.objects.filter(is_publish=True)
     serializer_class = getProductSerializer
@@ -29,7 +33,6 @@ class getProduct(viewsets.ModelViewSet):
     search_fields = ('title', 'about')
     filter_fields = ('category','subcategory', 'subcategory2', "price_14", "price_30")
     
-
     def get_queryset(self):
         # user = self.request.user
         # if user.is_authenticated:
@@ -42,15 +45,17 @@ class getProduct(viewsets.ModelViewSet):
         return self.queryset
 
 
-class recomendations(APIView):
+class recomendations(AutoPrefetchViewSetMixin, APIView):
     permission_classes = [permissions.AllowAny,]
 
+    @method_decorator(cache_page(60*60*2))
+    @method_decorator(vary_on_cookie)
     def get(self, request):
         r = Recomendation.objects.get(id=1).products.all()
         ids = []
         for i in r:
             ids.append(i.id)
-        queryset = Product.objects.filter(is_publish=True).exclude(id__in=ids).order_by("-publish_date")[:50]
+        queryset = Product.objects.filter(is_publish=True).exclude(id__in=ids).order_by("-publish_date")[:30]
         queryset = list(r)+list(queryset)
         serializer_class = getProductSerializer(queryset, many=True, context={'request': request})
         return Response(serializer_class.data)
@@ -127,9 +132,10 @@ class Delete(APIView):
             return Response(s.errors)
 
 
-class favorites(APIView):
+class favorites(AutoPrefetchViewSetMixin,APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
+    @method_decorator(cache_page(60*60*2))
     def get(self, request):
         queryset = request.user.favorites.all()
         s = getProductSerializer(queryset, many = True, context={'request': request})
@@ -199,18 +205,20 @@ class ProductPublish(APIView):
             return Response(s.errors)
             
 
-class GetProductPublish(APIView):
+class GetProductPublish(AutoPrefetchViewSetMixin, APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
+    @method_decorator(cache_page(60*60*2))
     def get(self, request):
         p = Product.objects.filter(is_publish=False)
         s = getProductSerializer(p, many=True, context={'request': request})
         return Response(s.data)
 
 
-class ReturnApi(APIView):
+class ReturnApi(AutoPrefetchViewSetMixin, APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
+    @method_decorator(cache_page(60*60*2))
     def get(self, request):
         p = Product.objects.filter(is_rented=True, count_day__isnull=False, rented_obj__is_rented=True,
                                     rented_obj__return_product=1, rented_obj__is_ended=False)
@@ -274,9 +282,10 @@ class ReturnApi(APIView):
             return Response(s.errors)
 
 
-class RetrunPickup(APIView):
+class RetrunPickup(AutoPrefetchViewSetMixin, APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
+    @method_decorator(cache_page(60*60*2))
     def get(self, request):
         p = Product.objects.filter(is_rented=True, count_day__isnull=False, rented_obj__is_rented=True, 
                                 rented_obj__return_product=2, rented_obj__is_ended=False)
@@ -305,9 +314,10 @@ class RetrunPickup(APIView):
         return Response(s.data)
 
 
-class ReturnProduct(APIView):
+class ReturnProduct(AutoPrefetchViewSetMixin, APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
+    @method_decorator(cache_page(60*60*2))
     def get(self, request):
         queryset = Product.objects.filter(in_stock=True, is_rented=False, leave=False)
         s = getProductSerializer(queryset, many=True, context={'request': request})
@@ -327,9 +337,10 @@ class ReturnProduct(APIView):
             return Response(s.errors)
 
 
-class productInStock(APIView):
+class productInStock(AutoPrefetchViewSetMixin, APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
+    @method_decorator(cache_page(60*60*2))
     def get(self, request):
         queryset = Product.objects.filter(in_stock=True, is_rented=False, leave=True)
         s = getProductSerializer(queryset, many=True, context={'request': request})

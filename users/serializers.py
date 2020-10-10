@@ -20,15 +20,18 @@ class AvatarSerializer(serializers.Serializer):
     avatar = serializers.CharField()
 
 
-class UserSerializer(serializers.ModelSerializer):
-    avatar = serializers.SerializerMethodField('get_avatar_url')
+class UserSerializer(serializers.Serializer):
+    avatar = serializers.SerializerMethodField('get_avatar_url', read_only=True)
+    id = serializers.IntegerField(read_only=True)
+    nickname = serializers.CharField()
+    phone = serializers.CharField(read_only=True)
 
     def get_avatar_url(self, obj):
         return self.context['request'].build_absolute_uri(obj.avatar.url)
-    class Meta:
-        model = User
-        fields = ("id", "avatar", "nickname", "phone")
-        read_only_fields = ("avatar", "phone", "id")
+    # class Meta:
+    #     model = User
+    #     fields = ("id", "avatar", "nickname", "phone")
+    #     read_only_fields = ("avatar", "phone", "id")
 
 
 class pushSerializer(serializers.Serializer):

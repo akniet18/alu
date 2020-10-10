@@ -13,11 +13,15 @@ from products.serializers import *
 from message.models import Message
 from utils.messages import *
 from utils.push import send_push
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+from django.views.decorators.vary import vary_on_cookie
+from django_auto_prefetching import AutoPrefetchViewSetMixin
 
-
-class BasketView(APIView):
+class BasketView(AutoPrefetchViewSetMixin, APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
+    @method_decorator(cache_page(60*60*2))
     def get(self, request):
         queryset = request.user.basket.all()
         s = getProductSerializer(queryset, many=True, context={'request': request})
@@ -36,9 +40,10 @@ class BasketView(APIView):
             return Response(s.errors)           
 
 
-class rentedApi(APIView):
+class rentedApi(AutoPrefetchViewSetMixin, APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
+    @method_decorator(cache_page(60*60*2))
     def get(self, request):
         queryset = Rented.objects.filter(user=request.user, is_rented=True, is_ended=False)
         serializer_class = rentedSerializer(queryset, many=True, context={'request': request})
@@ -133,9 +138,10 @@ class rentedApi(APIView):
             return Response(s.errors)
 
 
-class MyRentedProduct(APIView):
+class MyRentedProduct(AutoPrefetchViewSetMixin, APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
+    @method_decorator(cache_page(60*60*2))
     def get(self, request):
         products = Product.objects.filter(owner=request.user)
         for i in products:
@@ -195,18 +201,20 @@ class AcceptOrRejectRent(APIView):
             return Response(s.errors)
 
 
-class adminNewRentedApi(APIView):
+class adminNewRentedApi(AutoPrefetchViewSetMixin, APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
+    @method_decorator(cache_page(60*60*2))
     def get(self, request):
         queryset = Rented.objects.filter(is_rented=False, is_ended=False, is_checked=False)
         serializer_class = rentedSerializer(queryset, many=True, context={'request': request})
         return Response(serializer_class.data)
   
 
-class adminRentedApi(APIView):
+class adminRentedApi(AutoPrefetchViewSetMixin, APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
+    @method_decorator(cache_page(60*60*2))
     def get(self, request):
         queryset = Rented.objects.filter(is_rented=True, is_ended=False, is_checked=True)
         serializer_class = rentedSerializer(queryset, many=True, context={'request': request})
@@ -224,9 +232,10 @@ class adminRentedApi(APIView):
 
 
 
-class DeliverToPickUp(APIView):
+class DeliverToPickUp(AutoPrefetchViewSetMixin, APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
+    @method_decorator(cache_page(60*60*2))
     def get(self, request):
         queryset = Rented.objects.filter(is_rented=False, is_ended=False, is_checked=False)
         serializer_class = rentedSerializer(queryset, many=True, context={'request': request})
@@ -284,9 +293,10 @@ class ToDeliverDate(APIView):
             return Response(s.errors)
 
 
-class deliver(APIView):
+class deliver(AutoPrefetchViewSetMixin, APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
+    @method_decorator(cache_page(60*60*2))
     def get(self, request):
         r = Rented.objects.filter(is_rented=False)
         a = []
