@@ -44,7 +44,7 @@ class getProduct(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
 class recomendations(AutoPrefetchViewSetMixin, APIView):
     permission_classes = [permissions.AllowAny,]
 
-    @method_decorator(cache_page(60*60*2))
+    @method_decorator(cache_page(30))
     @method_decorator(vary_on_cookie)
     def get(self, request):
         r = Recomendation.objects.get(id=1).products.all()
@@ -203,7 +203,6 @@ class ProductPublish(APIView):
 class GetProductPublish(AutoPrefetchViewSetMixin, APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
-    @method_decorator(cache_page(60*60*2))
     def get(self, request):
         p = Product.objects.filter(is_publish=False)
         s = getProductSerializer(p, many=True, context={'request': request})
@@ -213,7 +212,6 @@ class GetProductPublish(AutoPrefetchViewSetMixin, APIView):
 class ReturnApi(AutoPrefetchViewSetMixin, APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
-    @method_decorator(cache_page(60*60*2))
     def get(self, request):
         p = Product.objects.filter(is_rented=True, count_day__isnull=False, rented_obj__is_rented=True,
                                     rented_obj__return_product=1, rented_obj__is_ended=False)
@@ -280,7 +278,6 @@ class ReturnApi(AutoPrefetchViewSetMixin, APIView):
 class RetrunPickup(AutoPrefetchViewSetMixin, APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
-    @method_decorator(cache_page(60*60*2))
     def get(self, request):
         p = Product.objects.filter(is_rented=True, count_day__isnull=False, rented_obj__is_rented=True, 
                                 rented_obj__return_product=2, rented_obj__is_ended=False)
@@ -312,7 +309,6 @@ class RetrunPickup(AutoPrefetchViewSetMixin, APIView):
 class ReturnProduct(AutoPrefetchViewSetMixin, APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
-    @method_decorator(cache_page(60*60*2))
     def get(self, request):
         queryset = Product.objects.filter(in_stock=True, is_rented=False, leave=False)
         s = getProductSerializer(queryset, many=True, context={'request': request})
@@ -335,7 +331,6 @@ class ReturnProduct(AutoPrefetchViewSetMixin, APIView):
 class productInStock(AutoPrefetchViewSetMixin, APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
-    @method_decorator(cache_page(60*60*2))
     def get(self, request):
         queryset = Product.objects.filter(in_stock=True, is_rented=False, leave=True)
         s = getProductSerializer(queryset, many=True, context={'request': request})

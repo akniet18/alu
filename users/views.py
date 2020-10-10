@@ -20,9 +20,6 @@ from utils.compress import *
 from push_notifications.models import APNSDevice, GCMDevice
 from utils.push import send_push
 from utils.smsc_api import SMSC
-from django.utils.decorators import method_decorator
-from django.views.decorators.cache import cache_page
-from django.views.decorators.vary import vary_on_cookie
 from django_auto_prefetching import AutoPrefetchViewSetMixin
 smsc = SMSC()
 
@@ -172,7 +169,6 @@ class Avatar(APIView):
 class detailUser(AutoPrefetchViewSetMixin, APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
-    @method_decorator(cache_page(60*60*2))
     def get(self, request, id):
         u = User.objects.get(id = id)
         s = UserSerializer(u, context={'request': request})
