@@ -21,7 +21,6 @@ from django_auto_prefetching import AutoPrefetchViewSetMixin
 class BasketView(AutoPrefetchViewSetMixin, APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
-    @method_decorator(cache_page(60*60*2))
     def get(self, request):
         queryset = request.user.basket.all()
         s = getProductSerializer(queryset, many=True, context={'request': request})

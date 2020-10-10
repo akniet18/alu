@@ -34,10 +34,6 @@ class getProduct(AutoPrefetchViewSetMixin, viewsets.ModelViewSet):
     filter_fields = ('category','subcategory', 'subcategory2', "price_14", "price_30")
     
     def get_queryset(self):
-        # user = self.request.user
-        # if user.is_authenticated:
-        #     if user.role == 1:
-        #         self.queryset = Product.objects.filter(is_publish=False)
         minheight = self.request.GET.get('minprice')
         maxheight = self.request.GET.get('maxprice')
         if(minheight and maxheight):
@@ -135,7 +131,6 @@ class Delete(APIView):
 class favorites(AutoPrefetchViewSetMixin,APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
-    @method_decorator(cache_page(60*60*2))
     def get(self, request):
         queryset = request.user.favorites.all()
         s = getProductSerializer(queryset, many = True, context={'request': request})
